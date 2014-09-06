@@ -1,7 +1,5 @@
 ENV['RAILS_ENV'] ||= 'test'
 DOORKEEPER_ORM = (ENV['orm'] || 'mongoid4').to_sym
-TABLE_NAME_PREFIX = ENV['table_name_prefix'] || nil
-TABLE_NAME_SUFFIX = ENV['table_name_suffix'] || nil
 
 $LOAD_PATH.unshift File.dirname(__FILE__)
 
