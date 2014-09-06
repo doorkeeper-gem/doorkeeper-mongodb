@@ -1,5 +1,5 @@
 module Doorkeeper
-  module ORM
+  module Orm
     module MongoMapper
       def self.initialize_models!
         require 'doorkeeper/orm/mongo_mapper/access_grant'

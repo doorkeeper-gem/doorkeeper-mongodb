@@ -1,5 +1,5 @@
 module Doorkeeper
-  module ORM
+  module Orm
     module Mongoid3
       def self.initialize_models!
         require 'doorkeeper/orm/mongoid3/access_grant'
