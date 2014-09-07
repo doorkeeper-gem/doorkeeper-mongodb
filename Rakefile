@@ -10,7 +10,7 @@ require 'rdoc/task'
 
 RDoc::Task.new(:rdoc) do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'DoorkeeperBundle'
+  rdoc.title    = 'DoorkeeperOrms'
   rdoc.options << '--line-numbers'
   rdoc.rdoc_files.include('lib/**/*.rb')
 end

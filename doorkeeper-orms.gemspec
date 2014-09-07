@@ -1,15 +1,15 @@
 $:.push File.expand_path("../lib", __FILE__)
 
 # Maintain your gem's version:
-require "doorkeeper_bundle/version"
+require "doorkeeper-orms/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = "doorkeeper_bundle"
-  s.version     = DoorkeeperBundle::VERSION
+  s.name        = "doorkeeper-orms"
+  s.version     = DoorkeeperOrms::VERSION
   s.authors     = ["jasl"]
   s.email       = ["jasl9187@hotmail.com"]
-  s.homepage    = "http://github.com/jasl/doorkeeper_bundle"
+  s.homepage    = "http://github.com/doorkeeper-gem/doorkeeper-orms"
   s.summary     = "Doorkeeper with extracted ORM specifics, including mongoid 2-4 and mongo_mapper."
   s.description = "Doorkeeper with extracted ORM specifics, including mongoid 2-4 and mongo_mapper"
   s.license     = "MIT"
