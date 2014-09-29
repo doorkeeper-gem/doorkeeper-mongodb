@@ -4,6 +4,8 @@ module Doorkeeper
   class AccessToken
     include Mongoid::Document
     include Mongoid::Timestamps
+
+    include AccessTokenMixin
     include Models::Mongoid2::Scopes
 
     self.store_in :oauth_access_tokens
