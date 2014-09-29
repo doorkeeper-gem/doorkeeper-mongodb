@@ -1,6 +1,8 @@
 module Doorkeeper
   class AccessToken
     include MongoMapper::Document
+    include AccessTokenMixin
+
     safe
     timestamps!
 
