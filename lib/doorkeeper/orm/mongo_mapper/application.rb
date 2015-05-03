@@ -1,6 +1,9 @@
 module Doorkeeper
   class Application
     include MongoMapper::Document
+
+    include ApplicationMixin
+
     safe
     timestamps!
 
@@ -14,12 +17,11 @@ module Doorkeeper
     key :redirect_uri, String
     key :scopes,       String
 
-    def scopes=(value)
-      write_attribute :scopes, value if value.present?
-    end
-
     def self.authorized_for(resource_owner)
-      ids = AccessToken.where(resource_owner_id: resource_owner.id, revoked_at: nil).map(&:application_id)
+      ids = AccessToken.where(
+          resource_owner_id: resource_owner.id,
+          revoked_at: nil
+        ).map(&:application_id)
       find(ids)
     end
 
