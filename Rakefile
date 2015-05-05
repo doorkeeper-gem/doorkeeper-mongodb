@@ -7,7 +7,7 @@ task :default => :spec
 task :load_doorkeeper do
   `git submodule init`
   `git submodule update`
-  `cp -r doorkeeper/spec .`
+  `cp -r -n doorkeeper/spec .`
   `bundle exec rspec`
 end
 

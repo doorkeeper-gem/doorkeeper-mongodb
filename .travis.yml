@@ -13,7 +13,6 @@ env:
   - rails=4.2.0
 
 gemfile:
-  - Gemfile
   - gemfiles/Gemfile.mongoid2.rb
   - gemfiles/Gemfile.mongoid3.rb
   - gemfiles/Gemfile.mongoid4.rb
