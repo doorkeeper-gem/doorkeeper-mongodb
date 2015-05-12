@@ -1,0 +1,3 @@
+[submodule "doorkeeper"]
+	path = doorkeeper
+	url = https://github.com/doorkeeper-gem/doorkeeper.git

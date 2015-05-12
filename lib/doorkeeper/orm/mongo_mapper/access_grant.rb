@@ -1,6 +1,9 @@
 module Doorkeeper
   class AccessGrant
     include MongoMapper::Document
+
+    include AccessGrantMixin
+
     safe
     timestamps!
 
@@ -9,14 +12,10 @@ module Doorkeeper
     key :resource_owner_id, ObjectId
     key :application_id,    ObjectId
     key :token,             String
+    key :scopes,            String
     key :expires_in,        Integer
     key :redirect_uri,      String
     key :revoked_at,        DateTime
-    key :scopes,            String
-
-    def scopes=(value)
-      write_attribute :scopes, value if value.present?
-    end
 
     def self.create_indexes
       ensure_index :token, unique: true
