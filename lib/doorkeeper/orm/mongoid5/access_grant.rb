@@ -1,7 +1,10 @@
 require 'doorkeeper/orm/mongoid5/concerns/scopes'
+require 'doorkeeper-mongodb/compatible'
 
 module Doorkeeper
   class AccessGrant
+    include DoorkeeperMongodb::Compatible
+
     include Mongoid::Document
     include Mongoid::Timestamps
 

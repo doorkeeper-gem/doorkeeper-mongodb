@@ -1,7 +1,10 @@
 require 'doorkeeper/orm/mongoid4/concerns/scopes'
+require 'doorkeeper-mongodb/compatible'
 
 module Doorkeeper
   class AccessToken
+    include DoorkeeperMongodb::Compatible
+
     include Mongoid::Document
     include Mongoid::Timestamps
 

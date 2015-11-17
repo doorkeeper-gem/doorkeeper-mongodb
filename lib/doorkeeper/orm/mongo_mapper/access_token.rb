@@ -1,5 +1,9 @@
+require 'doorkeeper-mongodb/compatible'
+
 module Doorkeeper
   class AccessToken
+    include DoorkeeperMongodb::Compatible
+
     include MongoMapper::Document
 
     include AccessTokenMixin
