@@ -13,3 +13,6 @@ spec/generators/tmp
 *.swp
 .idea
 spec
+
+/Gemfile
+
