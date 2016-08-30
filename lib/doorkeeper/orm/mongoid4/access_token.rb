@@ -32,6 +32,10 @@ module Doorkeeper
       :order_by
     end
 
+    def self.refresh_token_revoked_on_use?
+      fields.collect { |field| field[0] }.include?('previous_refresh_token')
+    end
+
     def self.created_at_desc
       [:created_at, :desc]
     end
