@@ -1,5 +1,6 @@
 require 'doorkeeper/orm/mongoid4/concerns/scopes'
 require 'doorkeeper-mongodb/compatible'
+require 'doorkeeper-mongodb/access_token_shared'
 
 module Doorkeeper
   class AccessToken
@@ -9,6 +10,7 @@ module Doorkeeper
     include Mongoid::Timestamps
 
     include AccessTokenMixin
+    include DoorkeeperMongodb::AccessTokenShared
     include Models::Mongoid4::Scopes
 
     self.store_in collection: :oauth_access_tokens
@@ -21,23 +23,5 @@ module Doorkeeper
 
     index({ token: 1 }, { unique: true })
     index({ refresh_token: 1 }, { unique: true, sparse: true })
-
-    def self.delete_all_for(application_id, resource_owner)
-      where(application_id: application_id,
-            resource_owner_id: resource_owner.id).delete_all
-    end
-    private_class_method :delete_all_for
-
-    def self.order_method
-      :order_by
-    end
-
-    def self.refresh_token_revoked_on_use?
-      fields.collect { |field| field[0] }.include?('previous_refresh_token')
-    end
-
-    def self.created_at_desc
-      [:created_at, :desc]
-    end
   end
 end
