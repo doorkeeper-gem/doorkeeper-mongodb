@@ -1,3 +1,5 @@
+require 'doorkeeper/orm/application_mixin_error_handler'
+
 module Doorkeeper
   class Application
     include Mongoid::Document
@@ -5,7 +7,6 @@ module Doorkeeper
     include Models::Mongoid5::Scopes
 
     include ApplicationMixin
-
     self.store_in collection: :oauth_applications
 
     field :name, type: String
@@ -22,4 +23,6 @@ module Doorkeeper
       find(ids)
     end
   end
+
+  Application.send :prepend, Orm::ApplicationMixinErrorHandler
 end

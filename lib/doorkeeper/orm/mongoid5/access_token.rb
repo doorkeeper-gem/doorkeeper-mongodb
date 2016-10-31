@@ -1,4 +1,5 @@
 require 'doorkeeper/orm/mongoid5/concerns/scopes'
+require 'doorkeeper/orm/access_token_mixin_error_handler'
 require 'doorkeeper-mongodb/compatible'
 
 module Doorkeeper
@@ -40,4 +41,6 @@ module Doorkeeper
       [:created_at, :desc]
     end
   end
+
+  AccessToken.send :prepend, Orm::AccessTokenMixinErrorHandler
 end

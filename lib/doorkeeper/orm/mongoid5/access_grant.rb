@@ -1,4 +1,5 @@
 require 'doorkeeper/orm/mongoid5/concerns/scopes'
+require 'doorkeeper/orm/access_grant_mixin_error_handler'
 require 'doorkeeper-mongodb/compatible'
 
 module Doorkeeper
@@ -21,4 +22,6 @@ module Doorkeeper
 
     index({ token: 1 }, { unique: true })
   end
+
+  AccessGrant.send :prepend, Orm::AccessGrantMixinErrorHandler
 end

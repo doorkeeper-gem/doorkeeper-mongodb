@@ -1,5 +1,6 @@
 require 'doorkeeper/orm/mongoid4/concerns/scopes'
 require 'doorkeeper-mongodb/compatible'
+require 'doorkeeper/orm/access_grant_mixin_error_handler'
 
 module Doorkeeper
   class AccessGrant
@@ -9,6 +10,8 @@ module Doorkeeper
     include Mongoid::Timestamps
 
     include AccessGrantMixin
+    prepend Orm::AccessGrantMixinErrorHandler
+
     include Models::Mongoid4::Scopes
 
     self.store_in collection: :oauth_access_grants
@@ -21,4 +24,6 @@ module Doorkeeper
 
     index({ token: 1 }, { unique: true })
   end
+
+  AccessGrant.send :prepend, Orm::AccessGrantMixinErrorHandler
 end
