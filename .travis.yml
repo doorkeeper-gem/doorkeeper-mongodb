@@ -9,11 +9,12 @@ rvm:
   - 2.3
 
 env:
-  - rails=3.2.0
-  - rails=4.1.0
-  - rails=4.2.0
-  - doorkeeper=3.0.0
-  - doorkeeper=4.2.0
+  - rails=3.2.0 doorkeeper=3.0.0
+  - rails=4.1.0 doorkeeper=3.0.0
+  - rails=4.2.0 doorkeeper=3.0.0
+  - rails=3.2.0 doorkeeper=4.2.0
+  - rails=4.1.0 doorkeeper=4.2.0
+  - rails=4.2.0 doorkeeper=4.2.0
 
 gemfile:
   - gemfiles/Gemfile.mongoid2.rb
