@@ -1,4 +1,5 @@
 require 'bundler/setup'
+require 'bundler/gem_helper'
 require 'rspec/core/rake_task'
 
 task :load_doorkeeper do

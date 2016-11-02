@@ -6,16 +6,20 @@ rvm:
   - 2.0
   - 2.1
   - 2.2
+  - 2.3
 
 env:
   - rails=3.2.0
   - rails=4.1.0
   - rails=4.2.0
+  - doorkeeper=3.0.0
+  - doorkeeper=4.2.0
 
 gemfile:
   - gemfiles/Gemfile.mongoid2.rb
   - gemfiles/Gemfile.mongoid3.rb
   - gemfiles/Gemfile.mongoid4.rb
+  - gemfiles/Gemfile.mongoid5.rb
   - gemfiles/Gemfile.mongo_mapper.rb
 
 services:
@@ -37,4 +41,7 @@ matrix:
       env: rails=4.2.0
 
     - gemfile: gemfiles/Gemfile.mongoid4.rb
+      env: rails=3.2.0
+
+    - gemfile: gemfiles/Gemfile.mongoid5.rb
       env: rails=3.2.0
