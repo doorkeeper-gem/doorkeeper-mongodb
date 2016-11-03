@@ -16,6 +16,7 @@ module Doorkeeper
     field :resource_owner_id, type: Moped::BSON::ObjectId
     field :token, type: String
     field :refresh_token, type: String
+    field :previous_refresh_token, type: String
     field :expires_in, type: Integer
     field :revoked_at, type: DateTime
 
