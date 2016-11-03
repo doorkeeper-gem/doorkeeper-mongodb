@@ -9,7 +9,6 @@ task :load_doorkeeper do
   `git submodule update`
   `cd doorkeeper && git checkout v#{ENV['doorkeeper'] ||= '3.0.0'}`
   `cp -r -n doorkeeper/spec .`
-  ''
   `bundle exec rspec`
 end
 
