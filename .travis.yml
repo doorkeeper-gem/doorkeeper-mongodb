@@ -3,7 +3,8 @@ sudo: false
 cache: bundler
 
 before_install:
-  - cd doorkeeper && git checkout v${doorkeeper} && cd ../
+  - cd doorkeeper && git checkout v${doorkeeper}
+  - gem install rake -v 11.3.0
 
 script:
   - bundle exec rake
