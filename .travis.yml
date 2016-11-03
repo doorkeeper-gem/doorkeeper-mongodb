@@ -5,6 +5,9 @@ cache: bundler
 before_install:
   - cd doorkeeper && git checkout v${doorkeeper}
 
+script:
+  - bundle exec rake
+
 rvm:
   - 2.0
   - 2.1
