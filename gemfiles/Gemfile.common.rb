@@ -6,4 +6,4 @@ source 'https://rubygems.org'
 gemspec path: '../'
 
 gem 'rails', "~> #{ENV['rails']}"
-gem 'doorkeeper', "~> #{ENV['doorkeeper']}"
+gem 'doorkeeper', "~> #{ENV['doorkeeper']}", github: 'doorkeeper-gem/doorkeeper'
