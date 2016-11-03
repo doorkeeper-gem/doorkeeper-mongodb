@@ -1,4 +1,5 @@
 require 'doorkeeper/orm/mongoid5/concerns/scopes'
+require 'doorkeeper/orm/access_token_mixin_error_handler'
 require 'doorkeeper-mongodb/compatible'
 
 module Doorkeeper
@@ -16,6 +17,7 @@ module Doorkeeper
     field :resource_owner_id, type: BSON::ObjectId
     field :token, type: String
     field :refresh_token, type: String
+    field :previous_refresh_token, type: String
     field :expires_in, type: Integer
     field :revoked_at, type: DateTime
 
@@ -40,4 +42,6 @@ module Doorkeeper
       [:created_at, :desc]
     end
   end
+
+  AccessToken.send :prepend, Orm::AccessTokenMixinErrorHandler
 end

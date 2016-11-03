@@ -1,4 +1,5 @@
 require 'bundler/setup'
+require 'bundler/gem_helper'
 require 'rspec/core/rake_task'
 
 task :load_doorkeeper do
@@ -6,6 +7,7 @@ task :load_doorkeeper do
   `git checkout spec`
   `git submodule init`
   `git submodule update`
+  `cd doorkeeper && git checkout v#{ENV['doorkeeper'] ||= '3.0.0'}`
   `cp -r -n doorkeeper/spec .`
   `bundle exec rspec`
 end

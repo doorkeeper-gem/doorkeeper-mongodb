@@ -1,3 +1,5 @@
+require 'doorkeeper/orm/application_mixin_error_handler'
+
 module Doorkeeper
   class Application
     include Mongoid::Document
@@ -5,6 +7,7 @@ module Doorkeeper
     include Models::Mongoid4::Scopes
 
     include ApplicationMixin
+    prepend Orm::ApplicationMixinErrorHandler
 
     self.store_in collection: :oauth_applications
 
@@ -21,5 +24,7 @@ module Doorkeeper
       ids = AccessToken.where(resource_owner_id: resource_owner.id, revoked_at: nil).map(&:application_id)
       find(ids)
     end
+
+    Application.send :prepend, Orm::ApplicationMixinErrorHandler
   end
 end
