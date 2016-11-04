@@ -1,6 +1,6 @@
 module Doorkeeper
   module Models
-    module Mongoid5
+    module Mongoid6
       module Ownership
         extend ActiveSupport::Concern
 

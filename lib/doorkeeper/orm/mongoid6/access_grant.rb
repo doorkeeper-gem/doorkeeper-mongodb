@@ -9,7 +9,7 @@ module Doorkeeper
     include Mongoid::Timestamps
 
     include AccessGrantMixin
-    include Models::Mongoid5::Scopes
+    include Models::Mongoid6::Scopes
 
     self.store_in collection: :oauth_access_grants
 
