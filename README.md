@@ -22,7 +22,7 @@ Set the ORM configuration:
 
 ``` ruby
 Doorkeeper.configure do
-  orm :mongoid2 # or :mongoid3, :mongoid4, :mongoid5, :mongo_mapper
+  orm :mongoid2 # or :mongoid3, :mongoid4, :mongoid5, :mongoid6, :mongo_mapper
 end
 ```
 
