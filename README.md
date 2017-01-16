@@ -2,11 +2,11 @@
 
 ## Installation
 
-doorkeeper-mongodb provides doorkeeper support to MongoMapper, Mongoid 2, 3, 4 and 5.
+doorkeeper-mongodb provides doorkeeper support to MongoMapper, Mongoid 2, 3, 4 and 5, __and now 6__!.
 To start using it, add to your Gemfile:
 
 ``` ruby
-gem "doorkeeper-mongodb", github: "doorkeeper-gem/doorkeeper-mongodb"
+gem "doorkeeper-mongodb", github: "michaeltrimm/doorkeeper-mongodb"
 ```
 
 Run [doorkeeper’s installation generator]:
