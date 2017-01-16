@@ -6,16 +6,20 @@ rvm:
   - 2.0
   - 2.1
   - 2.2
+  - 2.3
 
 env:
   - rails=3.2.0
   - rails=4.1.0
   - rails=4.2.0
+  - rails=5.0.1
 
 gemfile:
   - gemfiles/Gemfile.mongoid2.rb
   - gemfiles/Gemfile.mongoid3.rb
   - gemfiles/Gemfile.mongoid4.rb
+  - gemfiles/Gemfile.mongoid5.rb
+  - gemfiles/Gemfile.mongoid6.rb
   - gemfiles/Gemfile.mongo_mapper.rb
 
 services:
@@ -25,16 +29,17 @@ matrix:
   exclude:
     - env: rails=3.2.0
       rvm: 2.2
-
     - gemfile: gemfiles/Gemfile.mongoid2.rb
       env: rails=4.1.0
     - gemfile: gemfiles/Gemfile.mongoid2.rb
       env: rails=4.2.0
-
     - gemfile: gemfiles/Gemfile.mongoid3.rb
       env: rails=4.1.0
     - gemfile: gemfiles/Gemfile.mongoid3.rb
       env: rails=4.2.0
-
     - gemfile: gemfiles/Gemfile.mongoid4.rb
       env: rails=3.2.0
+    - gemfile: gemfiles/Gemfile.mongoid5.rb
+      env: rails=4.2.0
+    - gemfile: gemfiles/Gemfile.mongoid6.rb
+      env: rails=5.0.1
