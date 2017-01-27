@@ -2,7 +2,7 @@
 
 ## Installation
 
-doorkeeper-mongodb provides doorkeeper support to MongoMapper, Mongoid 2, 3, 4 and 5.
+doorkeeper-mongodb provides doorkeeper support to MongoMapper, Mongoid 2, 3, 4 and 5, __and now 6__!
 To start using it, add to your Gemfile:
 
 ``` ruby
@@ -22,7 +22,7 @@ Set the ORM configuration:
 
 ``` ruby
 Doorkeeper.configure do
-  orm :mongoid2 # or :mongoid3, :mongoid4, :mongoid5, :mongo_mapper
+  orm :mongoid2 # or :mongoid3, :mongoid4, :mongoid5, :mongoid6, :mongo_mapper
 end
 ```
 
