@@ -11,7 +11,7 @@ module Doorkeeper
     include AccessTokenMixin
     include Models::Mongoid4::Scopes
 
-    self.store_in collection: :oauth_access_tokens
+    store_in collection: :oauth_access_tokens
 
     field :resource_owner_id, type: BSON::ObjectId
     field :token, type: String
@@ -19,8 +19,8 @@ module Doorkeeper
     field :expires_in, type: Integer
     field :revoked_at, type: DateTime
 
-    index({ token: 1 }, { unique: true })
-    index({ refresh_token: 1 }, { unique: true, sparse: true })
+    index({ token: 1 }, unique: true)
+    index({ refresh_token: 1 }, unique: true, sparse: true)
 
     def self.delete_all_for(application_id, resource_owner)
       where(application_id: application_id,
@@ -37,7 +37,7 @@ module Doorkeeper
     end
 
     def self.created_at_desc
-      [:created_at, :desc]
+      %i[created_at desc]
     end
   end
 end

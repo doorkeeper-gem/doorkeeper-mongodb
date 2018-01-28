@@ -11,7 +11,7 @@ module Doorkeeper
     include AccessGrantMixin
     include Models::Mongoid5::Scopes
 
-    self.store_in collection: :oauth_access_grants
+    store_in collection: :oauth_access_grants
 
     field :resource_owner_id, type: BSON::ObjectId
     field :token, type: String
@@ -19,6 +19,6 @@ module Doorkeeper
     field :redirect_uri, type: String
     field :revoked_at, type: DateTime
 
-    index({ token: 1 }, { unique: true })
+    index({ token: 1 }, unique: true)
   end
 end

@@ -3,7 +3,7 @@ module DoorkeeperMongodb
     extend ActiveSupport::Concern
 
     module ClassMethods
-      def transaction(_ = {}, &block)
+      def transaction(_ = {}, &_block)
         yield
       end
     end

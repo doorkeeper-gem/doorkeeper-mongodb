@@ -22,7 +22,7 @@ module Doorkeeper
     key :scopes,            String
 
     def self.last
-      self.sort(:created_at).last
+      sort(:created_at).last
     end
 
     def self.delete_all_for(application_id, resource_owner)

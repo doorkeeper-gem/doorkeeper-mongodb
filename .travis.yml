@@ -2,20 +2,25 @@ language: ruby
 sudo: false
 cache: bundler
 
+before_install:
+  - gem update --system # For Ruby 2.5
+
 rvm:
-  - 2.0
   - 2.1
   - 2.2
+  - 2.3
+  - 2.4
+  - 2.5
 
 env:
-  - rails=3.2.0
-  - rails=4.1.0
   - rails=4.2.0
+  - rails=5.0.6
+  - rails=5.1.4
 
 gemfile:
-  - gemfiles/Gemfile.mongoid2.rb
-  - gemfiles/Gemfile.mongoid3.rb
   - gemfiles/Gemfile.mongoid4.rb
+  - gemfiles/Gemfile.mongoid5.rb
+  - gemfiles/Gemfile.mongoid6.rb
   - gemfiles/Gemfile.mongo_mapper.rb
 
 services:
@@ -23,18 +28,24 @@ services:
 
 matrix:
   exclude:
-    - env: rails=3.2.0
-      rvm: 2.2
+    - env: rails=5.0.6
+      rvm: 2.1
+    - env: rails=5.1.4
+      rvm: 2.1
 
-    - gemfile: gemfiles/Gemfile.mongoid2.rb
-      env: rails=4.1.0
-    - gemfile: gemfiles/Gemfile.mongoid2.rb
-      env: rails=4.2.0
-
-    - gemfile: gemfiles/Gemfile.mongoid3.rb
-      env: rails=4.1.0
-    - gemfile: gemfiles/Gemfile.mongoid3.rb
-      env: rails=4.2.0
-
+    # Mongoid4 requires activemodel ~> 4.0
     - gemfile: gemfiles/Gemfile.mongoid4.rb
-      env: rails=3.2.0
+      env: rails=5.0.6
+    - gemfile: gemfiles/Gemfile.mongoid4.rb
+      env: rails=5.1.4
+
+    # Mongoid5 requires activemodel ~> 4.0
+    - gemfile: gemfiles/Gemfile.mongoid5.rb
+      env: rails=5.0.6
+    - gemfile: gemfiles/Gemfile.mongoid5.rb
+      env: rails=5.1.4
+
+    - gemfile: gemfiles/Gemfile.mongoid6.rb
+      env: rails=4.2.0
+    - gemfile: gemfiles/Gemfile.mongoid6.rb
+      rvm: 2.1

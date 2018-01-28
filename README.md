@@ -1,8 +1,9 @@
 # doorkeeper-mongodb extension
+[![Build Status](https://travis-ci.org/doorkeeper-gem/doorkeeper-mongodb.svg?branch=master)](https://travis-ci.org/doorkeeper-gem/doorkeeper-mongodb)
 
 ## Installation
 
-doorkeeper-mongodb provides doorkeeper support to MongoMapper, Mongoid 2, 3, 4 and 5.
+doorkeeper-mongodb provides doorkeeper support to MongoMapper, Mongoid 2, 3, 4, 5 and 6.
 To start using it, add to your Gemfile:
 
 ``` ruby
@@ -22,7 +23,7 @@ Set the ORM configuration:
 
 ``` ruby
 Doorkeeper.configure do
-  orm :mongoid2 # or :mongoid3, :mongoid4, :mongoid5, :mongo_mapper
+  orm :mongoid6 # or :mongoid4, :mongoid5, :mongo_mapper
 end
 ```
 
