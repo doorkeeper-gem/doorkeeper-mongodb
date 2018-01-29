@@ -6,7 +6,7 @@ module Doorkeeper
     include DoorkeeperMongodb::Compatible
 
     include DoorkeeperMongodb::Shared::Scopes
-    include DoorkeeperMongodb::Mixins::AccessGrantMixin
+    include DoorkeeperMongodb::Mixins::Mongoid::AccessGrantMixin
 
     store_in collection: :oauth_access_grants
 

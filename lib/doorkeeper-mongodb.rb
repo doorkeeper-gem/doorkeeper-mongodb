@@ -4,14 +4,20 @@ require 'doorkeeper'
 
 require 'doorkeeper-mongodb/compatible'
 require 'doorkeeper-mongodb/shared/scopes'
-require 'doorkeeper-mongodb/mixins/access_grant_mixin'
-require 'doorkeeper-mongodb/mixins/access_token_mixin'
-require 'doorkeeper-mongodb/mixins/application_mixin'
+
+require 'doorkeeper-mongodb/mixins/mongo_mapper/access_grant_mixin'
+require 'doorkeeper-mongodb/mixins/mongo_mapper/access_token_mixin'
+require 'doorkeeper-mongodb/mixins/mongo_mapper/application_mixin'
+
+require 'doorkeeper/orm/mongo_mapper'
+
+require 'doorkeeper-mongodb/mixins/mongoid/access_grant_mixin'
+require 'doorkeeper-mongodb/mixins/mongoid/access_token_mixin'
+require 'doorkeeper-mongodb/mixins/mongoid/application_mixin'
 
 require 'doorkeeper/orm/mongoid4'
 require 'doorkeeper/orm/mongoid5'
 require 'doorkeeper/orm/mongoid6'
-require 'doorkeeper/orm/mongo_mapper'
 
 module DoorkeeperMongodb
   def load_locales

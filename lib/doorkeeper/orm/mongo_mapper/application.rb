@@ -1,15 +1,17 @@
 module Doorkeeper
   class Application
+    include DoorkeeperMongodb::Compatible
+
     include MongoMapper::Document
 
-    include ApplicationMixin
+    include DoorkeeperMongodb::Mixins::MongoMapper::ApplicationMixin
 
     safe
     timestamps!
 
     set_collection_name 'oauth_applications'
 
-    many :authorized_tokens, class_name: 'Doorkeeper::AccessToken'
+    many :authorized_tokens, class_name: 'Doorkeeper::AccessToken', dependent: :destroy
 
     key :name,         String
     key :uid,          String
@@ -28,6 +30,14 @@ module Doorkeeper
 
     def self.create_indexes
       ensure_index :uid, unique: true
+    end
+
+    def save!(options = {})
+      if options.key?(:validate)
+        super(options.merge(safe: options.delete(:validate)))
+      else
+        super
+      end
     end
   end
 end

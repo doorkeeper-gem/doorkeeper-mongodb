@@ -6,7 +6,7 @@ module Doorkeeper
     include DoorkeeperMongodb::Compatible
 
     include DoorkeeperMongodb::Shared::Scopes
-    include DoorkeeperMongodb::Mixins::ApplicationMixin
+    include DoorkeeperMongodb::Mixins::Mongoid::ApplicationMixin
 
     store_in collection: :oauth_applications
 

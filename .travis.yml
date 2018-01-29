@@ -49,3 +49,9 @@ matrix:
       env: rails=4.2.0
     - gemfile: gemfiles/Gemfile.mongoid6.rb
       rvm: 2.1
+
+    # Mongomapper uses XML serialization
+    - gemfile: gemfiles/Gemfile.mongo_mapper.rb
+      env: rails=5.0.6
+    - gemfile: gemfiles/Gemfile.mongo_mapper.rb
+      env: rails=5.1.4
