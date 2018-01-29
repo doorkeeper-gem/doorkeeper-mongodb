@@ -1,15 +1,12 @@
-require 'doorkeeper/orm/mongoid6/concerns/scopes'
-require 'doorkeeper-mongodb/compatible'
-
 module Doorkeeper
   class AccessGrant
-    include DoorkeeperMongodb::Compatible
-
     include Mongoid::Document
     include Mongoid::Timestamps
 
-    include AccessGrantMixin
-    include Models::Mongoid6::Scopes
+    include DoorkeeperMongodb::Compatible
+
+    include DoorkeeperMongodb::Shared::Scopes
+    include DoorkeeperMongodb::Mixins::AccessGrantMixin
 
     store_in collection: :oauth_access_grants
 

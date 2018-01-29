@@ -1,21 +1,19 @@
-require 'doorkeeper/orm/mongoid6/concerns/scopes'
-require 'doorkeeper-mongodb/compatible'
-
 module Doorkeeper
   class AccessToken
-    include DoorkeeperMongodb::Compatible
-
     include Mongoid::Document
     include Mongoid::Timestamps
 
-    include AccessTokenMixin
-    include Models::Mongoid6::Scopes
+    include DoorkeeperMongodb::Compatible
+
+    include DoorkeeperMongodb::Shared::Scopes
+    include DoorkeeperMongodb::Mixins::AccessTokenMixin
 
     store_in collection: :oauth_access_tokens
 
     field :resource_owner_id, type: BSON::ObjectId
     field :token, type: String
     field :refresh_token, type: String
+    field :previous_refresh_token, type: String
     field :expires_in, type: Integer
     field :revoked_at, type: DateTime
 

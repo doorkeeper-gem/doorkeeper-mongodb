@@ -10,6 +10,13 @@ task :load_doorkeeper do
   `bundle exec rspec`
 end
 
+desc 'Update Git submodules.'
+task :update_submodules do
+  Rake::Task['load_doorkeeper'].invoke if Dir['doorkeeper/*'].empty?
+
+  `git submodule foreach git pull origin master`
+end
+
 desc 'Default: run specs.'
 task default: :spec
 
