@@ -1,4 +1,4 @@
-# doorkeeper-mongodb extension
+# Doorkeeper MongoDB extension
 [![Build Status](https://travis-ci.org/doorkeeper-gem/doorkeeper-mongodb.svg?branch=master)](https://travis-ci.org/doorkeeper-gem/doorkeeper-mongodb)
 
 ## Installation
@@ -28,20 +28,34 @@ Doorkeeper.configure do
 end
 ```
 
-### Mongoid indexes
+## MongoMapper
+
+**NOTE**: `mongo_mapper` gem works properly with MongoDB <= 3.2, on older versions it throws
+`Database command 'insert' failed: Unknown option to insert command: w` exception. This problem
+requires `mongo_mapper` gem update.
+
+Also if you want to use `mongo_mapper` with Rails >= 5.0, then you need to add `activemodel-serializers-xml` gem
+to your `Gemfile` (or `gems.rb`):
+
+```ruby
+gem 'activemodel-serializers-xml'
+```
+
+## Indexes
+
+### Mongoid
 
 Make sure you create indexes for doorkeeper models. You can do this either by
 running `rake db:mongoid:create_indexes` or (if you're using Mongoid 2) by
 adding `autocreate_indexes: true` to your `config/mongoid.yml`
 
 
-### MongoMapper indexes
+### MongoMapper
 
 Generate the `db/indexes.rb` file and create indexes for the doorkeeper models:
 
     rails generate doorkeeper:mongo_mapper:indexes
     rake db:index
-
 
 ## Tests
 
@@ -52,7 +66,7 @@ variables defined in `.travis.yml` file.
 To run locally, you need to choose a gemfile, with a command similar to:
 
 ```
-$ export BUNDLE_GEMFILE=$PWD/gemfiles/Gemfile.mongoid4.rb
+$ export BUNDLE_GEMFILE=$PWD/gemfiles/Gemfile.mongoid6.rb
 ```
 
 ---

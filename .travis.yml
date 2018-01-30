@@ -3,6 +3,13 @@ sudo: false
 cache: bundler
 
 before_install:
+  # MongoMapper works only with MongoDB <= 3.2.x
+  - wget http://fastdl.mongodb.org/linux/mongodb-linux-x86_64-3.2.18.tgz
+  - tar xzf mongodb-linux-x86_64-3.2.18.tgz
+  - ${PWD}/mongodb-linux-x86_64-3.2.18/bin/mongod --version
+  - mkdir ${PWD}/mongodb-linux-x86_64-3.2.18/data
+  # Bind on another port in order to test mongo_mapper separately
+  - ${PWD}/mongodb-linux-x86_64-3.2.18/bin/mongod --dbpath ${PWD}/mongodb-linux-x86_64-3.2.18/data --logpath ${PWD}/mongodb-linux-x86_64-3.2.18/mongodb.log --fork --port 27027
   - gem update --system # For Ruby 2.5
 
 rvm:
@@ -16,6 +23,7 @@ env:
   - rails=4.2.0
   - rails=5.0.6
   - rails=5.1.4
+  - rails=5.2.0.beta2
 
 gemfile:
   - gemfiles/Gemfile.mongoid4.rb
@@ -32,26 +40,30 @@ matrix:
       rvm: 2.1
     - env: rails=5.1.4
       rvm: 2.1
+    - env: rails=5.2.0.beta2
+      rvm: 2.1
 
     # Mongoid4 requires activemodel ~> 4.0
     - gemfile: gemfiles/Gemfile.mongoid4.rb
       env: rails=5.0.6
     - gemfile: gemfiles/Gemfile.mongoid4.rb
       env: rails=5.1.4
+    - gemfile: gemfiles/Gemfile.mongoid4.rb
+      env: rails=5.2.0.beta2
 
     # Mongoid5 requires activemodel ~> 4.0
     - gemfile: gemfiles/Gemfile.mongoid5.rb
       env: rails=5.0.6
     - gemfile: gemfiles/Gemfile.mongoid5.rb
       env: rails=5.1.4
+    - gemfile: gemfiles/Gemfile.mongoid5.rb
+      env: rails=5.2.0.beta2
 
+      # Mongoid6 requires activemodel ~> 5.0
     - gemfile: gemfiles/Gemfile.mongoid6.rb
       env: rails=4.2.0
     - gemfile: gemfiles/Gemfile.mongoid6.rb
       rvm: 2.1
 
-    # Mongomapper uses XML serialization
     - gemfile: gemfiles/Gemfile.mongo_mapper.rb
-      env: rails=5.0.6
-    - gemfile: gemfiles/Gemfile.mongo_mapper.rb
-      env: rails=5.1.4
+      env: rails=5.2.0.beta2
