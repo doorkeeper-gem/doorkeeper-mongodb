@@ -13,6 +13,7 @@ spec/generators/tmp
 *.swp
 .idea
 spec
+!spec/dummy/config/mongo*.yml
 
 /Gemfile
 
