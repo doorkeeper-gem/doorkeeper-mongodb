@@ -8,8 +8,17 @@ module DoorkeeperMongodb
         include Doorkeeper::Models::Scopes
 
         included do
-          has_many :access_grants, dependent: :delete, class_name: 'Doorkeeper::AccessGrant'
-          has_many :access_tokens, dependent: :delete, class_name: 'Doorkeeper::AccessToken'
+          has_many_options = {
+            dependent: :delete
+          }
+
+          # Mongoid7 dropped :delete option
+          if ::Mongoid::VERSION[0].to_i >= 7
+            has_many_options[:dependent] = :delete_all
+          end
+
+          has_many :access_grants, has_many_options.merge(class_name: 'Doorkeeper::AccessGrant')
+          has_many :access_tokens, has_many_options.merge(class_name: 'Doorkeeper::AccessToken')
 
           validates :name, :secret, :uid, presence: true
           validates :uid, uniqueness: true

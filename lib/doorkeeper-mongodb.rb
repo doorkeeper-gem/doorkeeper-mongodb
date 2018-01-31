@@ -15,9 +15,11 @@ require 'doorkeeper-mongodb/mixins/mongoid/access_grant_mixin'
 require 'doorkeeper-mongodb/mixins/mongoid/access_token_mixin'
 require 'doorkeeper-mongodb/mixins/mongoid/application_mixin'
 
+# Maybe we need to squash this into one? With backward compatibility
 require 'doorkeeper/orm/mongoid4'
 require 'doorkeeper/orm/mongoid5'
 require 'doorkeeper/orm/mongoid6'
+require 'doorkeeper/orm/mongoid7'
 
 module DoorkeeperMongodb
   def load_locales

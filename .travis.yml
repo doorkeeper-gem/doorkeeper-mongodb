@@ -23,12 +23,13 @@ env:
   - rails=4.2.0
   - rails=5.0.6
   - rails=5.1.4
-  - rails=5.2.0.beta2
+  - rails=5.2.0.rc1
 
 gemfile:
   - gemfiles/Gemfile.mongoid4.rb
   - gemfiles/Gemfile.mongoid5.rb
   - gemfiles/Gemfile.mongoid6.rb
+  - gemfiles/Gemfile.mongoid7.rb
   - gemfiles/Gemfile.mongo_mapper.rb
 
 services:
@@ -40,7 +41,7 @@ matrix:
       rvm: 2.1
     - env: rails=5.1.4
       rvm: 2.1
-    - env: rails=5.2.0.beta2
+    - env: rails=5.2.0.rc1
       rvm: 2.1
 
     # Mongoid4 requires activemodel ~> 4.0
@@ -49,7 +50,7 @@ matrix:
     - gemfile: gemfiles/Gemfile.mongoid4.rb
       env: rails=5.1.4
     - gemfile: gemfiles/Gemfile.mongoid4.rb
-      env: rails=5.2.0.beta2
+      env: rails=5.2.0.rc1
 
     # Mongoid5 requires activemodel ~> 4.0
     - gemfile: gemfiles/Gemfile.mongoid5.rb
@@ -57,7 +58,7 @@ matrix:
     - gemfile: gemfiles/Gemfile.mongoid5.rb
       env: rails=5.1.4
     - gemfile: gemfiles/Gemfile.mongoid5.rb
-      env: rails=5.2.0.beta2
+      env: rails=5.2.0.rc1
 
       # Mongoid6 requires activemodel ~> 5.0
     - gemfile: gemfiles/Gemfile.mongoid6.rb
@@ -65,5 +66,13 @@ matrix:
     - gemfile: gemfiles/Gemfile.mongoid6.rb
       rvm: 2.1
 
+     # Mongoid7 requires activemodel ~> 5.1
+    - gemfile: gemfiles/Gemfile.mongoid7.rb
+      env: rails=4.2.0
+    - gemfile: gemfiles/Gemfile.mongoid7.rb
+      env: rails=5.0.6
+    - gemfile: gemfiles/Gemfile.mongoid7.rb
+      rvm: 2.1
+
     - gemfile: gemfiles/Gemfile.mongo_mapper.rb
-      env: rails=5.2.0.beta2
+      env: rails=5.2.0.rc1

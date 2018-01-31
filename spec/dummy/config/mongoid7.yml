@@ -1,0 +1,19 @@
+development:
+  clients:
+    default:
+      database: doorkeeper-mongoid7-development
+      hosts:
+        - localhost:27017
+      options:
+        write:
+          w: 1
+
+test:
+  clients:
+    default:
+      database: doorkeeper-mongoid7-test
+      hosts:
+        - localhost:27017
+      options:
+        write:
+          w: 1
