@@ -6,7 +6,7 @@ module Doorkeeper
 
     include MongoMapper::Document
 
-    include AccessGrantMixin
+    include DoorkeeperMongodb::Mixins::MongoMapper::AccessGrantMixin
 
     safe
     timestamps!
@@ -23,6 +23,14 @@ module Doorkeeper
 
     def self.create_indexes
       ensure_index :token, unique: true
+    end
+
+    def save!(options = {})
+      if options.key?(:validate)
+        super(options.merge(safe: options.delete(:validate)))
+      else
+        super
+      end
     end
   end
 end

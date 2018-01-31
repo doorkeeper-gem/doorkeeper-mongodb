@@ -1,8 +1,9 @@
-ENV['rails'] ||= '4.2.0'
+ENV['rails'] ||= '4.2'
+ENV['doorkeeper'] ||= '4.0'
 
 source 'https://rubygems.org'
 
 gemspec path: '../'
 
 gem 'rails', "~> #{ENV['rails']}"
-gem 'doorkeeper', '~> 3.0.0', github: 'doorkeeper-gem/doorkeeper'
+gem 'doorkeeper', "~> #{ENV['doorkeeper']}"

@@ -1,10 +1,10 @@
 module Doorkeeper
   module Orm
-    module Mongoid3
+    module Mongoid7
       def self.initialize_models!
-        require 'doorkeeper/orm/mongoid3/access_grant'
-        require 'doorkeeper/orm/mongoid3/access_token'
-        require 'doorkeeper/orm/mongoid3/application'
+        require 'doorkeeper/orm/mongoid7/access_grant'
+        require 'doorkeeper/orm/mongoid7/access_token'
+        require 'doorkeeper/orm/mongoid7/application'
       end
 
       def self.initialize_application_owner!

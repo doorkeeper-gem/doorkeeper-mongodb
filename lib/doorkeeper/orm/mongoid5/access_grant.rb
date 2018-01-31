@@ -1,17 +1,14 @@
-require 'doorkeeper/orm/mongoid5/concerns/scopes'
-require 'doorkeeper-mongodb/compatible'
-
 module Doorkeeper
   class AccessGrant
-    include DoorkeeperMongodb::Compatible
-
     include Mongoid::Document
     include Mongoid::Timestamps
 
-    include AccessGrantMixin
-    include Models::Mongoid5::Scopes
+    include DoorkeeperMongodb::Compatible
 
-    self.store_in collection: :oauth_access_grants
+    include DoorkeeperMongodb::Shared::Scopes
+    include DoorkeeperMongodb::Mixins::Mongoid::AccessGrantMixin
+
+    store_in collection: :oauth_access_grants
 
     field :resource_owner_id, type: BSON::ObjectId
     field :token, type: String
@@ -19,6 +16,6 @@ module Doorkeeper
     field :redirect_uri, type: String
     field :revoked_at, type: DateTime
 
-    index({ token: 1 }, { unique: true })
+    index({ token: 1 }, unique: true)
   end
 end
