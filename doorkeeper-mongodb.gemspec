@@ -6,8 +6,8 @@ require 'doorkeeper-mongodb/version'
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |gem|
   gem.name        = 'doorkeeper-mongodb'
-  gem.version     = DoorkeeperMongodb::VERSION
-  gem.authors     = ['jasl']
+  gem.version     = DoorkeeperMongodb.gem_version
+  gem.authors     = ['jasl', 'nikita_bulai']
   gem.email       = ['jasl9187@hotmail.com']
   gem.homepage    = 'http://github.com/doorkeeper-gem/doorkeeper-mongodb'
   gem.summary     = 'Doorkeeper mongoid and mongo_mapper ORMs'
