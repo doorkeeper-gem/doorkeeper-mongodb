@@ -1,14 +1,20 @@
 # Doorkeeper MongoDB extension
+[![Gem Version](https://badge.fury.io/rb/doorkeeper-mongodb.svg)](http://badge.fury.io/rb/doorkeeper-mongodb)
 [![Build Status](https://travis-ci.org/doorkeeper-gem/doorkeeper-mongodb.svg?branch=master)](https://travis-ci.org/doorkeeper-gem/doorkeeper-mongodb)
 
 ## Installation
 
-doorkeeper-mongodb provides Doorkeeper support to [MongoMapper](https://github.com/mongomapper/mongomapper) and
-[Mongoid](https://github.com/mongodb/mongoid) (2, 3, 4 and 5 for doorkeeper-mongodb `3.0` and 4, 5, 6 and 7beta for version `4.0`).
-To start using it, add to your Gemfile:
+`doorkeeper-mongodb` provides [Doorkeeper](https://github.com/doorkeeper-gem/doorkeeper) support to 
+[MongoMapper](https://github.com/mongomapper/mongomapper) and [Mongoid](https://github.com/mongodb/mongoid)
+(2, 3, 4 and 5 for doorkeeper-mongodb `3.0` and 4, 5, 6 and 7beta for version `4.0`). To start using it, add
+to your Gemfile:
 
 ``` ruby
-gem "doorkeeper-mongodb", github: "doorkeeper-gem/doorkeeper-mongodb"
+gem 'doorkeeper, '~> 4.0'
+gem 'doorkeeper-mongodb, '~> 4.0'
+
+# or if yoy want to use cutting edge version
+# gem 'doorkeeper-mongodb', github: 'doorkeeper-gem/doorkeeper-mongodb'
 ```
 
 Run [doorkeeper’s installation generator]:
