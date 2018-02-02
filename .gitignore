@@ -12,6 +12,7 @@ gemfiles/*.lock
 spec
 !spec/dummy/config/mongo*.yml
 !spec/support/orm/mongo*
+*.gem
 
 /Gemfile
 

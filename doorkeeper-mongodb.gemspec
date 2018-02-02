@@ -14,7 +14,7 @@ Gem::Specification.new do |gem|
   gem.description = 'Doorkeeper mongoid and mongo_mapper ORMs'
   gem.license     = 'MIT'
 
-  gem.files = Dir['lib/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
+  gem.files = Dir['lib/**/*', 'config/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
   gem.test_files = Dir['spec/**/*']
 
   gem.add_dependency 'doorkeeper', '>= 4.0.0'

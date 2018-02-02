@@ -7,7 +7,7 @@ module DoorkeeperMongodb
     # Semver
     MAJOR = 4
     MINOR = 0
-    TINY = 0
+    TINY = 1
 
     # Full version number
     STRING = [MAJOR, MINOR, TINY].compact.join('.')
