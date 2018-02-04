@@ -10,10 +10,10 @@
 to your Gemfile:
 
 ``` ruby
-gem 'doorkeeper, '~> 4.0'
-gem 'doorkeeper-mongodb, '~> 4.0'
+gem 'doorkeeper', '~> 4.0'
+gem 'doorkeeper-mongodb', '~> 4.0'
 
-# or if yoy want to use cutting edge version
+# or if you want to use cutting edge version:
 # gem 'doorkeeper-mongodb', github: 'doorkeeper-gem/doorkeeper-mongodb'
 ```
 
