@@ -1,18 +1,24 @@
+require 'active_support/lazy_load_hooks'
+
 module Doorkeeper
   module Orm
     module MongoMapper
       def self.initialize_models!
         install_dependencies!
 
-        require 'doorkeeper/orm/mongo_mapper/access_grant'
-        require 'doorkeeper/orm/mongo_mapper/access_token'
-        require 'doorkeeper/orm/mongo_mapper/application'
+        lazy_load do
+          require 'doorkeeper/orm/mongo_mapper/access_grant'
+          require 'doorkeeper/orm/mongo_mapper/access_token'
+          require 'doorkeeper/orm/mongo_mapper/application'
+        end
       end
 
       def self.initialize_application_owner!
-        require 'doorkeeper/models/concerns/ownership'
+        lazy_load do
+          require 'doorkeeper/models/concerns/ownership'
 
-        Doorkeeper::Application.send :include, Doorkeeper::Models::Ownership
+          Doorkeeper::Application.send :include, Doorkeeper::Models::Ownership
+        end
       end
 
       def self.check_requirements!(_config); end
@@ -27,6 +33,10 @@ module Doorkeeper
             raise
           end
         end
+      end
+
+      def self.lazy_load(&block)
+        ActiveSupport.on_load(:mongo_mapper, {}, &block)
       end
     end
   end
