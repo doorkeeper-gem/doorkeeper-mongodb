@@ -5,12 +5,14 @@ require 'doorkeeper'
 require 'doorkeeper-mongodb/compatible'
 require 'doorkeeper-mongodb/shared/scopes'
 
+require 'doorkeeper-mongodb/mixins/mongo_mapper/base_mixin'
 require 'doorkeeper-mongodb/mixins/mongo_mapper/access_grant_mixin'
 require 'doorkeeper-mongodb/mixins/mongo_mapper/access_token_mixin'
 require 'doorkeeper-mongodb/mixins/mongo_mapper/application_mixin'
 
 require 'doorkeeper/orm/mongo_mapper'
 
+require 'doorkeeper-mongodb/mixins/mongoid/base_mixin'
 require 'doorkeeper-mongodb/mixins/mongoid/access_grant_mixin'
 require 'doorkeeper-mongodb/mixins/mongoid/access_token_mixin'
 require 'doorkeeper-mongodb/mixins/mongoid/application_mixin'

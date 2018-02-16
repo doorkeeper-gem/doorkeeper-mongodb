@@ -7,6 +7,7 @@ task :load_doorkeeper do
   `git submodule init`
   `git submodule update`
   `cp -r -n doorkeeper/spec .`
+  `rm -rf spec/generators/` # we are not ActiveRecord
   `bundle exec rspec`
 end
 

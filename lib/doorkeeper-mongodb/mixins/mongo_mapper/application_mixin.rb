@@ -6,6 +6,7 @@ module DoorkeeperMongodb
 
         include Doorkeeper::OAuth::Helpers
         include Doorkeeper::Models::Scopes
+        include BaseMixin
 
         included do
           many :access_grants, dependent: :destroy, class_name: 'Doorkeeper::AccessGrant'

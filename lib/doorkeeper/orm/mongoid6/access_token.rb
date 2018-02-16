@@ -20,12 +20,6 @@ module Doorkeeper
     index({ token: 1 }, unique: true)
     index({ refresh_token: 1 }, unique: true, sparse: true)
 
-    def self.delete_all_for(application_id, resource_owner)
-      where(application_id: application_id,
-            resource_owner_id: resource_owner.id).delete_all
-    end
-    private_class_method :delete_all_for
-
     def self.order_method
       :order_by
     end
