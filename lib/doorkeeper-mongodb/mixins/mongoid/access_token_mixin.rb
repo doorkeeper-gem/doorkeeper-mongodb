@@ -9,6 +9,7 @@ module DoorkeeperMongodb
         include Doorkeeper::Models::Revocable
         include Doorkeeper::Models::Accessible
         include Doorkeeper::Models::Scopes
+        include BaseMixin
 
         included do
           belongs_to_opts = {

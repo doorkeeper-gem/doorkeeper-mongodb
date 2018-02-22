@@ -17,6 +17,10 @@ module DoorkeeperMongodb
           validates :redirect_uri, redirect_uri: true
 
           before_validation :generate_uid, :generate_secret, on: :create
+
+          def redirect_uri=(uris)
+            super(uris.is_a?(Array) ? uris.join("\n") : uris)
+          end
         end
 
         module ClassMethods

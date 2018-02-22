@@ -4,8 +4,10 @@ require 'rspec/core/rake_task'
 task :load_doorkeeper do
   `rm -rf spec/`
   `git checkout spec`
-  `git submodule init`
-  `git submodule update`
+  unless Dir.exist?('doorkeeper')
+    `git submodule init`
+    `git submodule update`
+  end
   `cp -r -n doorkeeper/spec .`
   `rm -rf spec/generators/` # we are not ActiveRecord
   `bundle exec rspec`
