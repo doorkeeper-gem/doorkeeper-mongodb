@@ -5,6 +5,6 @@ gem 'mongo_mapper'
 gem 'bson_ext'
 
 # Rails >= 5
-if ENV['rails'][0].to_i >= 5
+if ENV['RAILS'][0].to_i >= 5
   gem 'activemodel-serializers-xml'
 end

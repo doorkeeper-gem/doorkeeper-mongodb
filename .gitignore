@@ -15,4 +15,4 @@ spec
 *.gem
 
 /Gemfile
-
+coverage
