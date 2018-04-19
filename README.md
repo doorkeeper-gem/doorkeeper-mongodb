@@ -6,7 +6,7 @@
 
 `doorkeeper-mongodb` provides [Doorkeeper](https://github.com/doorkeeper-gem/doorkeeper) support to 
 [MongoMapper](https://github.com/mongomapper/mongomapper) and [Mongoid](https://github.com/mongodb/mongoid)
-(2, 3, 4 and 5 for doorkeeper-mongodb `3.0` and 4, 5, 6 and 7beta for version `4.0`). To start using it, add
+(2, 3, 4 and 5 for doorkeeper-mongodb `3.0` and 4, 5, 6 and 7 for version `4.0` and higher). To start using it, add
 to your Gemfile:
 
 ``` ruby
@@ -30,7 +30,7 @@ Set the ORM configuration:
 
 ``` ruby
 Doorkeeper.configure do
-  orm :mongoid6 # or :mongoid7 (beta), :mongoid4, :mongoid5, :mongo_mapper
+  orm :mongoid6 # or :mongoid7, :mongoid4, :mongoid5, :mongo_mapper
 end
 ```
 
