@@ -5,8 +5,8 @@ module DoorkeeperMongodb
 
   module VERSION
     # Semver
-    MAJOR = 5
-    MINOR = 0
+    MAJOR = 4
+    MINOR = 2
     TINY = 0
 
     # Full version number
