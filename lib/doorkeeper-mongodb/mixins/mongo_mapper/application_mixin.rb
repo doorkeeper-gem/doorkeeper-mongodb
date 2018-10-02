@@ -34,7 +34,11 @@ module DoorkeeperMongodb
           #   if there is no record with such credentials
           #
           def by_uid_and_secret(uid, secret)
-            where(uid: uid.to_s, secret: secret.to_s).first
+            app = by_uid(uid)
+            return unless app
+            return app if secret.blank? && !app.confidential
+            return unless app.secret == secret
+            app
           end
 
           # Returns an instance of the Doorkeeper::Application with specific UID.
