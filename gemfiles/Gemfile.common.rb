@@ -1,5 +1,5 @@
 ENV['RAILS'] ||= '4.2'
-ENV['DOORKEEPER'] ||= '4.0'
+ENV['DOORKEEPER'] ||= '4.4'
 
 source 'https://rubygems.org'
 

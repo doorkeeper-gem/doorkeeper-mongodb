@@ -176,7 +176,7 @@ module DoorkeeperMongodb
         #   The OAuth 2.0 Authorization Framework: Bearer Token Usage
         #
         def token_type
-          'bearer'
+          'Bearer'
         end
 
         def use_refresh_token?

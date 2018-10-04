@@ -14,6 +14,7 @@ module Doorkeeper
     field :uid, type: String
     field :secret, type: String
     field :redirect_uri, type: String
+    field :confidential, type: Boolean, default: true
 
     index({ uid: 1 }, unique: true)
 
