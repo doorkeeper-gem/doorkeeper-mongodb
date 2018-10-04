@@ -17,7 +17,7 @@ module Doorkeeper
     key :uid,          String
     key :secret,       String
     key :redirect_uri, String
-    key :confidential, Boolean
+    key :confidential, Boolean, default: true
     key :scopes,       String
 
     def self.authorized_for(resource_owner)

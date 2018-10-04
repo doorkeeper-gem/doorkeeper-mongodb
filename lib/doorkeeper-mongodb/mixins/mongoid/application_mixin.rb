@@ -63,12 +63,8 @@ module DoorkeeperMongodb
           end
 
           def supports_confidentiality?
-            if ENV['RAILS_ENV'] ||= 'test'
-              if respond_to?(:column_names)
-                column_names.include?("confidential")
-              else
-                fields.include?("confidential")
-              end
+            if respond_to?(:column_names)
+              column_names.include?("confidential")
             else
               fields.include?("confidential")
             end
