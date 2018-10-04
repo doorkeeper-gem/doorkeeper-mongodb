@@ -10,6 +10,7 @@ module Doorkeeper
           require 'doorkeeper/orm/mongo_mapper/access_grant'
           require 'doorkeeper/orm/mongo_mapper/access_token'
           require 'doorkeeper/orm/mongo_mapper/application'
+          require 'doorkeeper/orm/mongo_mapper/stale_records_cleaner'
         end
       end
 
