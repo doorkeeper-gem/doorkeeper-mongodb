@@ -24,17 +24,19 @@ module DoorkeeperMongodb
           validates :name, :secret, :uid, presence: true
           validates :uid, uniqueness: true
           validates :redirect_uri, redirect_uri: true
+          validates :confidential, inclusion: { in: [true, false] }
+
+          validate :scopes_match_configured, if: :enforce_scopes?
 
           before_validation :generate_uid, :generate_secret, on: :create
-
-          def redirect_uri=(uris)
-            super(uris.is_a?(Array) ? uris.join("\n") : uris)
-          end
         end
 
         module ClassMethods
           # Returns an instance of the Doorkeeper::Application with
           # specific UID and secret.
+          #
+          # Public/Non-confidential applications will only find by uid if secret is
+          # blank.
           #
           # @param uid [#to_s] UID (any object that responds to `#to_s`)
           # @param secret [#to_s] secret (any object that responds to `#to_s`)
@@ -43,7 +45,11 @@ module DoorkeeperMongodb
           #   if there is no record with such credentials
           #
           def by_uid_and_secret(uid, secret)
-            where(uid: uid.to_s, secret: secret.to_s).first
+            app = by_uid(uid)
+            return unless app
+            return app if secret.blank? && !app.confidential?
+            return unless app.secret == secret
+            app
           end
 
           # Returns an instance of the Doorkeeper::Application with specific UID.
@@ -56,13 +62,29 @@ module DoorkeeperMongodb
           def by_uid(uid)
             where(uid: uid.to_s).first
           end
+
+          # Revokes AccessToken and AccessGrant records that have not been revoked and
+          # associated with the specific Application and Resource Owner.
+          #
+          # @param resource_owner [ActiveRecord::Base]
+          #   instance of the Resource Owner model
+          #
+          def revoke_tokens_and_grants_for(id, resource_owner)
+            Doorkeeper::AccessToken.revoke_all_for(id, resource_owner)
+            Doorkeeper::AccessGrant.revoke_all_for(id, resource_owner)
+          end
+        end
+
+        # Set an application's valid redirect URIs.
+        #
+        # @param uris [String, Array] Newline-separated string or array the URI(s)
+        #
+        # @return [String] The redirect URI(s) seperated by newlines.
+        def redirect_uri=(uris)
+          super(uris.is_a?(Array) ? uris.join("\n") : uris)
         end
 
         private
-
-        def has_scopes?
-          Doorkeeper::Application.fields.collect { |field| field[0] }.include?
-        end
 
         def generate_uid
           if uid.blank?
@@ -74,6 +96,17 @@ module DoorkeeperMongodb
           if secret.blank?
             self.secret = UniqueToken.generate
           end
+        end
+
+        def scopes_match_configured
+          if scopes.present? &&
+              !ScopeChecker.valid?(scopes.to_s, Doorkeeper.configuration.scopes)
+            errors.add(:scopes, :not_match_configured)
+          end
+        end
+
+        def enforce_scopes?
+          Doorkeeper.configuration.enforce_configured_scopes?
         end
       end
     end
