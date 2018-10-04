@@ -10,8 +10,17 @@
 to your Gemfile:
 
 ``` ruby
-gem 'doorkeeper', '~> 4.0'
-gem 'doorkeeper-mongodb', '~> 4.0'
+# For Doorkeeper < 4.4
+gem 'doorkeeper', '~> 4.3'
+gem 'doorkeeper-mongodb', '~> 4.1.0'
+
+# For Doorkeeper >= 4.4 && < 5.0
+gem 'doorkeeper', '~> 4.4'
+gem 'doorkeeper-mongodb', '~> 4.2'
+
+# For Doorkeeper >= 5.0
+gem 'doorkeeper', '~> 5.0'
+gem 'doorkeeper-mongodb', '~> 5.0'
 
 # or if you want to use cutting edge version:
 # gem 'doorkeeper-mongodb', github: 'doorkeeper-gem/doorkeeper-mongodb'
@@ -72,6 +81,7 @@ variables defined in `.travis.yml` file.
 To run locally, you need to choose a gemfile, with a command similar to:
 
 ```
+$ export RAILS=5.1
 $ export BUNDLE_GEMFILE=$PWD/gemfiles/Gemfile.mongoid6.rb
 ```
 

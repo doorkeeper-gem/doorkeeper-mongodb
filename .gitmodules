@@ -1,3 +1,4 @@
 [submodule "doorkeeper"]
 	path = doorkeeper
 	url = https://github.com/doorkeeper-gem/doorkeeper.git
+    branch = 4.4.0
