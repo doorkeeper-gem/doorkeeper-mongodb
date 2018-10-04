@@ -17,7 +17,7 @@ Gem::Specification.new do |gem|
   gem.files      = Dir['lib/**/*', 'config/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
   gem.test_files = Dir['spec/**/*']
 
-  gem.add_dependency 'doorkeeper', '>= 4.4.3', '< 5.0'
+  gem.add_dependency 'doorkeeper', '>= 5.0', '< 6.0'
 
   gem.add_development_dependency 'grape'
   gem.add_development_dependency 'coveralls'

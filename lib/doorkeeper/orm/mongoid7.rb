@@ -8,6 +8,7 @@ module Doorkeeper
           require 'doorkeeper/orm/mongoid7/access_grant'
           require 'doorkeeper/orm/mongoid7/access_token'
           require 'doorkeeper/orm/mongoid7/application'
+          require 'doorkeeper/orm/mongoid7/stale_records_cleaner'
         end
       end
 

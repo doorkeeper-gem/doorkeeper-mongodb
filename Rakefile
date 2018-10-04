@@ -7,7 +7,6 @@ task :load_doorkeeper do
   unless Dir.exist?('doorkeeper')
     `git submodule init`
     `git submodule update`
-    `cd doorkeeper; git checkout v4.4.3; cd ..`
   end
   `cp -r -n doorkeeper/spec .`
   `rm -rf spec/generators/` # we are not ActiveRecord
