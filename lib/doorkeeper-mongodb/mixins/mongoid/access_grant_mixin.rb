@@ -30,6 +30,15 @@ module DoorkeeperMongodb
           before_validation :generate_token, on: :create
         end
 
+        # never uses pkce, if pkce migrations were not generated
+        def uses_pkce?
+          pkce_supported? && code_challenge.present?
+        end
+
+        def pkce_supported?
+          respond_to? :code_challenge
+        end
+
         module ClassMethods
           # Searches for Doorkeeper::AccessGrant record with the
           # specific token value.
