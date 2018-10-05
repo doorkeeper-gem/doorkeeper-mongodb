@@ -4,12 +4,12 @@ User-visible changes worth mentioning.
 
 ## master
 
-- [#] Description here
+- [#36] Fix ownership concern to be Mongodb specific
 
 ## 4.2.0
 
 - [#32] Add `confidential` field for Doorkeeper >= 4.4
-- [#34] Fixes to support Doorkeeper +. 4.4
+- [#35] Fixes to support Doorkeeper +. 4.4
 
 ## 4.1.0
 
