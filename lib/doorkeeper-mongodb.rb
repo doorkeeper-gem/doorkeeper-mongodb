@@ -5,6 +5,9 @@ require 'doorkeeper'
 require 'doorkeeper-mongodb/compatible'
 require 'doorkeeper-mongodb/shared/scopes'
 
+require 'doorkeeper/orm/concerns/mongo_mapper/ownership'
+require 'doorkeeper/orm/concerns/mongoid/ownership'
+
 require 'doorkeeper-mongodb/mixins/mongo_mapper/base_mixin'
 require 'doorkeeper-mongodb/mixins/mongo_mapper/access_grant_mixin'
 require 'doorkeeper-mongodb/mixins/mongo_mapper/access_token_mixin'

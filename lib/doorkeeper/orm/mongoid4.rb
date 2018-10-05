@@ -13,7 +13,7 @@ module Doorkeeper
 
       def self.initialize_application_owner!
         lazy_load do
-          require 'doorkeeper/models/concerns/ownership'
+          require 'doorkeeper/orm/concerns/mongoid/ownership'
 
           Doorkeeper::Application.send :include, Doorkeeper::Models::Ownership
         end
