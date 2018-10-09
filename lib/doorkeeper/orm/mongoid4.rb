@@ -15,7 +15,7 @@ module Doorkeeper
         lazy_load do
           require 'doorkeeper/orm/concerns/mongoid/ownership'
 
-          Doorkeeper::Application.send :include, Doorkeeper::Models::Ownership
+          Doorkeeper::Application.send :include, Doorkeeper::Orm::Concerns::Mongoid::Ownership
         end
       end
 

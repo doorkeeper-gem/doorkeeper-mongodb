@@ -17,7 +17,7 @@ module Doorkeeper
         lazy_load do
           require 'doorkeeper/orm/concerns/mongo_mapper/ownership'
 
-          Doorkeeper::Application.send :include, Doorkeeper::Models::Ownership
+          Doorkeeper::Application.send :include, Doorkeeper::Orm::Concerns::MongoMapper::Ownership
         end
       end
 
