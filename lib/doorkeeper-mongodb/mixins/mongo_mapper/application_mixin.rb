@@ -5,7 +5,6 @@ module DoorkeeperMongodb
         extend ActiveSupport::Concern
 
         include Doorkeeper::OAuth::Helpers
-        include Doorkeeper::Models::Scopes
         include BaseMixin
 
         included do
