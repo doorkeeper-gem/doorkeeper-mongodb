@@ -9,6 +9,14 @@ module DoorkeeperMongodb
             order_by(attribute => direction.to_sym)
           end
         end
+
+        def as_json(*args)
+          json_response = super
+
+          json_response["id"] = json_response["_id"]
+
+          json_response
+        end
       end
     end
   end
