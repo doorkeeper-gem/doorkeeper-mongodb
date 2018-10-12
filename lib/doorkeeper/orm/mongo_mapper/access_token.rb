@@ -1,5 +1,3 @@
-require 'doorkeeper-mongodb/compatible'
-
 module Doorkeeper
   class AccessToken
     include DoorkeeperMongodb::Compatible
@@ -19,7 +17,7 @@ module Doorkeeper
     key :refresh_token,           String
     key :previous_refresh_token,  String
     key :expires_in,              Integer
-    key :revoked_at,              DateTime
+    key :revoked_at,              Time
     key :scopes,                  String
 
     def self.last

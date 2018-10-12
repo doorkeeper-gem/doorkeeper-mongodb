@@ -12,7 +12,6 @@ require 'doorkeeper-mongodb/mixins/mongo_mapper/base_mixin'
 require 'doorkeeper-mongodb/mixins/mongo_mapper/access_grant_mixin'
 require 'doorkeeper-mongodb/mixins/mongo_mapper/access_token_mixin'
 require 'doorkeeper-mongodb/mixins/mongo_mapper/application_mixin'
-require 'doorkeeper-mongodb/mixins/mongo_mapper/stale_records_cleaner_mixin'
 
 require 'doorkeeper/orm/mongo_mapper'
 

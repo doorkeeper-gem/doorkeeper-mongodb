@@ -1,5 +1,3 @@
-require 'doorkeeper-mongodb/compatible'
-
 module Doorkeeper
   class AccessGrant
     include DoorkeeperMongodb::Compatible
@@ -19,7 +17,7 @@ module Doorkeeper
     key :scopes,                String
     key :expires_in,            Integer
     key :redirect_uri,          String
-    key :revoked_at,            DateTime
+    key :revoked_at,            Time
     key :code_challenge,        String
     key :code_challenge_method, String
 

@@ -33,12 +33,32 @@ module Doorkeeper
       ensure_index :uid, unique: true
     end
 
+    # Due to lack of proper ORM independence in Doorkeeper gem :(
+    #
+    def update(attributes = {})
+      self.attributes = attributes
+      save
+    end
+
+    def create_or_update(options = {})
+      run_callbacks(:save) do
+        result = persisted? ? _update(options) : create(options)
+        result != false
+      end
+    end
+
     def save!(options = {})
       if options.key?(:validate)
         super(options.merge(safe: options.delete(:validate)))
       else
         super
       end
+    end
+
+    private
+
+    def _update(options = {})
+      save_to_collection(options.reverse_merge(:persistence_method => :save))
     end
   end
 end
