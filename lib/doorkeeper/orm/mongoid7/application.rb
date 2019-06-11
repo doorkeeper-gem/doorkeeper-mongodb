@@ -20,6 +20,10 @@ module Doorkeeper
 
     has_many :authorized_tokens, class_name: 'Doorkeeper::AccessToken'
 
+    def plaintext_secret
+      self.secret
+    end
+    
     def self.authorized_for(resource_owner)
       ids = AccessToken.where(
         resource_owner_id: resource_owner.id,
