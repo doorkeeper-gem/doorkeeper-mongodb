@@ -61,6 +61,10 @@ matrix:
       env: RAILS=5.1.6
     - gemfile: gemfiles/Gemfile.mongoid4.rb
       env: RAILS=5.2.0
+    - gemfile: gemfiles/Gemfile.mongoid4.rb
+      env: RAILS=6.0.0
+    - gemfile: gemfiles/Gemfile.mongoid4.rb
+      env: RAILS=6.0.1
 
     # Mongoid5 requires activemodel ~> 4.0
     - gemfile: gemfiles/Gemfile.mongoid5.rb
@@ -86,3 +90,7 @@ matrix:
 
     - gemfile: gemfiles/Gemfile.mongo_mapper.rb
       env: RAILS=5.2.0
+    - gemfile: gemfiles/Gemfile.mongo_mapper.rb
+      env: RAILS=6.0.0
+    - gemfile: gemfiles/Gemfile.mongo_mapper.rb
+      env: RAILS=6.0.1
