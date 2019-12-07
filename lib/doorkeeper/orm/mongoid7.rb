@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'active_support/lazy_load_hooks'
 
 module Doorkeeper
@@ -9,6 +11,7 @@ module Doorkeeper
           require 'doorkeeper/orm/mongoid7/access_token'
           require 'doorkeeper/orm/mongoid7/application'
           require 'doorkeeper/orm/mongoid7/stale_records_cleaner'
+          require 'doorkeeper/orm/mongoid7/redirect_uri_validator'
         end
       end
 
@@ -16,7 +19,7 @@ module Doorkeeper
         lazy_load do
           require 'doorkeeper/orm/concerns/mongoid/ownership'
 
-          Doorkeeper::Application.send :include, Doorkeeper::Orm::Concerns::Mongoid::Ownership
+          Doorkeeper::Application.include Doorkeeper::Orm::Concerns::Mongoid::Ownership
         end
       end
 

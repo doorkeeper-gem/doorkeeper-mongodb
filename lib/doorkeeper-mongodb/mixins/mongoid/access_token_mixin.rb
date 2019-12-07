@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DoorkeeperMongodb
   module Mixins
     module Mongoid
@@ -198,7 +200,6 @@ module DoorkeeperMongodb
           end
         end
 
-
         # Access Token type: Bearer.
         # @see https://tools.ietf.org/html/rfc6750
         #   The OAuth 2.0 Authorization Framework: Bearer Token Usage
@@ -246,6 +247,44 @@ module DoorkeeperMongodb
         #
         def acceptable?(scopes)
           accessible? && includes_scope?(*scopes)
+        end
+
+        ##
+        # Determines the secret storing transformer
+        # Unless configured otherwise, uses the plain secret strategy
+        def secret_strategy
+          ::Doorkeeper.configuration.token_secret_strategy
+        end
+
+        ##
+        # Determine the fallback storing strategy
+        # Unless configured, there will be no fallback
+        def fallback_secret_strategy
+          ::Doorkeeper.configuration.token_secret_fallback_strategy
+        end
+
+        # We keep a volatile copy of the raw refresh token for initial communication
+        # The stored refresh_token may be mapped and not available in cleartext.
+        def plaintext_refresh_token
+          if secret_strategy.allows_restoring_secrets?
+            secret_strategy.restore_secret(self, :refresh_token)
+          else
+            @raw_refresh_token
+          end
+        end
+
+        # We keep a volatile copy of the raw token for initial communication
+        # The stored refresh_token may be mapped and not available in cleartext.
+        #
+        # Some strategies allow restoring stored secrets (e.g. symmetric encryption)
+        # while hashing strategies do not, so you cannot rely on this value
+        # returning a present value for persisted tokens.
+        def plaintext_token
+          if secret_strategy.allows_restoring_secrets?
+            secret_strategy.restore_secret(self, :token)
+          else
+            @raw_token
+          end
         end
 
         private

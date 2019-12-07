@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'active_support/lazy_load_hooks'
 
 module Doorkeeper
@@ -9,6 +11,7 @@ module Doorkeeper
           require 'doorkeeper/orm/mongoid4/access_token'
           require 'doorkeeper/orm/mongoid4/application'
           require 'doorkeeper/orm/mongoid4/stale_records_cleaner'
+          require 'doorkeeper/orm/mongoid4/redirect_uri_validator'
         end
       end
 
