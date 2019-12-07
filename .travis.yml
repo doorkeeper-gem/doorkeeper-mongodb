@@ -45,6 +45,14 @@ matrix:
       rvm: 2.1
     - env: RAILS=5.2.0
       rvm: 2.1
+    - env: RAILS=6.0.0
+      rvm: 2.3
+    - env: RAILS=6.0.1
+      rvm: 2.3
+    - env: RAILS=6.0.0
+      rvm: 2.4
+    - env: RAILS=6.0.1
+      rvm: 2.4
 
     # Mongoid4 requires activemodel ~> 4.0
     - gemfile: gemfiles/Gemfile.mongoid4.rb
