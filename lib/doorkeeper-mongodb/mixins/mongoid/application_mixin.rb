@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'doorkeeper-mongodb/mixins/mongoid/redirect_uri_validator_mixin'
+
 module DoorkeeperMongodb
   module Mixins
     module Mongoid

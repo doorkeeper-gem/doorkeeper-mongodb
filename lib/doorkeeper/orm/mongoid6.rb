@@ -11,7 +11,6 @@ module Doorkeeper
           require 'doorkeeper/orm/mongoid6/access_token'
           require 'doorkeeper/orm/mongoid6/application'
           require 'doorkeeper/orm/mongoid6/stale_records_cleaner'
-          require 'doorkeeper/orm/mongoid6/redirect_uri_validator'
         end
       end
 

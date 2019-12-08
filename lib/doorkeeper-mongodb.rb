@@ -16,6 +16,7 @@ require 'doorkeeper-mongodb/mixins/mongo_mapper/application_mixin'
 require 'doorkeeper/orm/mongo_mapper'
 
 require 'doorkeeper-mongodb/mixins/mongoid/base_mixin'
+require 'doorkeeper-mongodb/mixins/mongoid/redirect_uri_validator_mixin'
 require 'doorkeeper-mongodb/mixins/mongoid/access_grant_mixin'
 require 'doorkeeper-mongodb/mixins/mongoid/access_token_mixin'
 require 'doorkeeper-mongodb/mixins/mongoid/application_mixin'
