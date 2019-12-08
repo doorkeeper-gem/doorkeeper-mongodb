@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 require 'uri'
+require 'active_model'
 
 module Doorkeeper
-  class RedirectUriValidator < ::ActiveModel::EachValidator
+  class RedirectUriValidator < ActiveModel::EachValidator
     def validate_each(record, attribute, value)
       if value.blank?
         return if Doorkeeper.configuration.allow_blank_redirect_uri?(record)
