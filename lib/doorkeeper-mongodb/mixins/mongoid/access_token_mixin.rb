@@ -6,11 +6,11 @@ module DoorkeeperMongodb
       module AccessTokenMixin
         extend ActiveSupport::Concern
 
-        include Doorkeeper::OAuth::Helpers
-        include Doorkeeper::Models::Expirable
-        include Doorkeeper::Models::Revocable
-        include Doorkeeper::Models::Accessible
-        include Doorkeeper::Models::Scopes
+        include OAuth::Helpers
+        include Models::Expirable
+        include Models::Revocable
+        include Models::Accessible
+        include Models::Scopes
         include BaseMixin
 
         included do
