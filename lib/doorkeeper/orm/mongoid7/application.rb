@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Doorkeeper
   class Application
     include Mongoid::Document
@@ -5,8 +7,13 @@ module Doorkeeper
 
     include DoorkeeperMongodb::Compatible
 
-    include DoorkeeperMongodb::Shared::Scopes
+    # include DoorkeeperMongodb::Shared::Scopes
     include DoorkeeperMongodb::Mixins::Mongoid::ApplicationMixin
+
+    include OAuth::Helpers
+    include Models::Orderable
+    include Models::SecretStorable
+    include Models::Scopes
 
     store_in collection: :oauth_applications
 
