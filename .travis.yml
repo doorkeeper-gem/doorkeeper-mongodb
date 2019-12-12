@@ -28,11 +28,11 @@ env:
   - RAILS=6.0.1
 
 gemfile:
-  - gemfiles/Gemfile.mongoid4.rb
-  - gemfiles/Gemfile.mongoid5.rb
-  - gemfiles/Gemfile.mongoid6.rb
+#  - gemfiles/Gemfile.mongoid4.rb
+#  - gemfiles/Gemfile.mongoid5.rb
+#  - gemfiles/Gemfile.mongoid6.rb
   - gemfiles/Gemfile.mongoid7.rb
-  - gemfiles/Gemfile.mongo_mapper.rb
+#  - gemfiles/Gemfile.mongo_mapper.rb
 
 services:
   - mongodb
