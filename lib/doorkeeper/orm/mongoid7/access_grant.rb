@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Doorkeeper
   class AccessGrant
     include Mongoid::Document
@@ -5,8 +7,16 @@ module Doorkeeper
 
     include DoorkeeperMongodb::Compatible
 
-    include DoorkeeperMongodb::Shared::Scopes
+    # include DoorkeeperMongodb::Shared::Scopes
     include DoorkeeperMongodb::Mixins::Mongoid::AccessGrantMixin
+
+    include OAuth::Helpers
+    include Models::Expirable
+    include Models::Revocable
+    include Models::Accessible
+    include Models::Orderable
+    include Models::SecretStorable
+    include Models::Scopes
 
     store_in collection: :oauth_access_grants
 
