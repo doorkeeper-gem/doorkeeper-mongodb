@@ -16,9 +16,23 @@ module Doorkeeper
 
       def self.initialize_application_owner!
         lazy_load do
+          require 'doorkeeper/orm/concerns/mongoid/accessible'
+          require 'doorkeeper/orm/concerns/mongoid/expirable'
+          require 'doorkeeper/orm/concerns/mongoid/orderable'
           require 'doorkeeper/orm/concerns/mongoid/ownership'
+          require 'doorkeeper/orm/concerns/mongoid/reusable'
+          require 'doorkeeper/orm/concerns/mongoid/revocable'
+          require 'doorkeeper/orm/concerns/mongoid/scopes'
+          require 'doorkeeper/orm/concerns/mongoid/secret_storable'
 
+          Doorkeeper::Application.include Doorkeeper::Orm::Concerns::Mongoid::Accessible
+          Doorkeeper::Application.include Doorkeeper::Orm::Concerns::Mongoid::Expirable
+          Doorkeeper::Application.include Doorkeeper::Orm::Concerns::Mongoid::Orderable
           Doorkeeper::Application.include Doorkeeper::Orm::Concerns::Mongoid::Ownership
+          Doorkeeper::Application.include Doorkeeper::Orm::Concerns::Mongoid::Reusable
+          Doorkeeper::Application.include Doorkeeper::Orm::Concerns::Mongoid::Revocable
+          Doorkeeper::Application.include Doorkeeper::Orm::Concerns::Mongoid::Scopes
+          Doorkeeper::Application.include Doorkeeper::Orm::Concerns::Mongoid::SecretStorable
         end
       end
 
