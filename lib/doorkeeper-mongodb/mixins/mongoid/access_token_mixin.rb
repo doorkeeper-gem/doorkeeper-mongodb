@@ -113,7 +113,15 @@ module DoorkeeperMongodb
           # to bloat the memory. Could be overloaded in any ORM extension.
           #
           def find_access_token_in_batches(relation, *args, &block)
-            relation.find_in_batches(*args, &block)
+            current_batch, count = 0, relation.count
+
+            while count > 0 do
+              relation.all.skip(current_batch * 1000).limit(1000).each do |doc|
+                yield doc
+              end
+              count -= 1000
+              current_batch += 1
+            end
           end
 
           # Enumerates AccessToken records in batches to find a matching token.
