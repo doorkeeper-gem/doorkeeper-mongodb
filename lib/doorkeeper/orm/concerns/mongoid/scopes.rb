@@ -8,8 +8,7 @@ module Doorkeeper
       end
 
       def scopes=(value)
-        Array(value).join(" ")
-        # super Array(value).join(" ")
+        super Array(value).join(" ")
       end
 
       def scopes_string
