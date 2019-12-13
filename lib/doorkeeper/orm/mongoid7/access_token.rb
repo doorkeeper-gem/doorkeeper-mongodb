@@ -35,12 +35,25 @@ module Doorkeeper
       :order_by
     end
 
-    def self.refresh_token_revoked_on_use?
-      fields.collect { |field| field[0] }.include?('previous_refresh_token')
-    end
-
     def self.created_at_desc
       %i[created_at desc]
+    end
+
+    # Searches for not revoked Access Tokens associated with the
+    # specific Resource Owner.
+    #
+    # @param resource_owner [ActiveRecord::Base]
+    #   Resource Owner model instance
+    #
+    # @return [ActiveRecord::Relation]
+    #   active Access Tokens for Resource Owner
+    #
+    def self.active_for(resource_owner)
+      where(resource_owner_id: resource_owner.id, revoked_at: nil)
+    end
+
+    def self.refresh_token_revoked_on_use?
+      fields.include?("previous_refresh_token")
     end
   end
 end
