@@ -3,12 +3,19 @@
 module Doorkeeper
   module Models
     module Scopes
+      extend ActiveSupport::Concern
+
+      included do
+        field :scopes, type: String
+      end
+
       def scopes
         OAuth::Scopes.from_string(scopes_string)
       end
 
       def scopes=(value)
-        super Array(value).join(" ")
+        write_attribute :scopes, value
+        # super Array(value).join(" ")
       end
 
       def scopes_string
