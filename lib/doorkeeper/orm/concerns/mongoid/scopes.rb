@@ -10,7 +10,7 @@ module Doorkeeper
       end
 
       def scopes
-        OAuth::Scopes.from_string(scopes_string)
+        OAuth::Scopes.from_string(scopes_string).to_s
       end
 
       def scopes=(value)
