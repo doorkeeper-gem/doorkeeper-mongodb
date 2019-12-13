@@ -111,5 +111,30 @@ module Doorkeeper
     def enforce_scopes?
       Doorkeeper.configuration.enforce_configured_scopes?
     end
+
+    # Check whether the given plain text secret matches our stored secret
+    #
+    # @param input [#to_s] Plain secret provided by user
+    #        (any object that responds to `#to_s`)
+    #
+    # @return [true] Whether the given secret matches the stored secret
+    #                of this application.
+    #
+    def secret_matches?(input)
+      # return false if either is nil, since secure_compare depends on strings
+      # but Application secrets MAY be nil depending on confidentiality.
+      return false if input.nil? || secret.nil?
+
+      # When matching the secret by comparer function, all is well.
+      return true if secret_strategy.secret_matches?(input, secret)
+
+      # When fallback lookup is enabled, ensure applications
+      # with plain secrets can still be found
+      if fallback_secret_strategy
+        fallback_secret_strategy.secret_matches?(input, secret)
+      else
+        false
+      end
+    end
   end
 end
