@@ -14,8 +14,7 @@ module Doorkeeper
       end
 
       def scopes=(value)
-        write_attribute :scopes, value
-        # super Array(value).join(" ")
+        write_attribute :scopes, Array(value).join(" ")
       end
 
       def scopes_string
