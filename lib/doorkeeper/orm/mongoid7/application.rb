@@ -27,15 +27,6 @@ module Doorkeeper
 
     has_many :authorized_tokens, class_name: 'Doorkeeper::AccessToken'
 
-    # def self.authorized_for(resource_owner)
-    #   ids = AccessToken.where(
-    #     # resource_owner_id: resource_owner.id,
-    #     # revoked_at: nil
-    #   ).map(&:application_id)
-
-    #   find(ids)
-    # end
-
     # Returns Applications associated with active (not revoked) Access Tokens
     # that are owned by the specific Resource Owner.
     #
@@ -46,9 +37,18 @@ module Doorkeeper
     #   Applications authorized for the Resource Owner
     #
     def self.authorized_for(resource_owner)
-      resource_access_tokens = AccessToken.active_for(resource_owner)
-      where(id: resource_access_tokens.select(:application_id).distinct)
+      ids = AccessToken.where(
+        resource_owner_id: resource_owner.id,
+        revoked_at: nil
+      ).map(&:application_id)
+
+      find(ids)
     end
+
+    # def self.authorized_for(resource_owner)
+    #   resource_access_tokens = AccessToken.active_for(resource_owner)
+    #   where(id: resource_access_tokens.select(:application_id).distinct)
+    # end
 
     # Revokes AccessToken and AccessGrant records that have not been revoked and
     # associated with the specific Application and Resource Owner.
