@@ -10,10 +10,10 @@ module Doorkeeper
     # include DoorkeeperMongodb::Shared::Scopes
     include DoorkeeperMongodb::Mixins::Mongoid::ApplicationMixin
 
-    include OAuth::Helpers
-    include Models::Orderable
-    include Models::SecretStorable
-    include Models::Scopes
+    include Doorkeeper::OAuth::Helpers
+    include Doorkeeper::Models::Orderable
+    include Doorkeeper::Models::SecretStorable
+    include Doorkeeper::Models::Scopes
 
     store_in collection: :oauth_applications
 

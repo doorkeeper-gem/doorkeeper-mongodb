@@ -10,13 +10,13 @@ module Doorkeeper
     # include DoorkeeperMongodb::Shared::Scopes
     include DoorkeeperMongodb::Mixins::Mongoid::AccessGrantMixin
 
-    include OAuth::Helpers
-    include Models::Expirable
-    include Models::Revocable
-    include Models::Accessible
-    include Models::Orderable
-    include Models::SecretStorable
-    include Models::Scopes
+    include Doorkeeper::OAuth::Helpers
+    include Doorkeeper::Models::Expirable
+    include Doorkeeper::Models::Revocable
+    include Doorkeeper::Models::Accessible
+    include Doorkeeper::Models::Orderable
+    include Doorkeeper::Models::SecretStorable
+    include Doorkeeper::Models::Scopes
 
     store_in collection: :oauth_access_grants
 
