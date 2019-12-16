@@ -10,7 +10,7 @@ before_install:
   - mkdir ${PWD}/mongodb-linux-x86_64-3.2.18/data
   # Bind on another port in order to test mongo_mapper separately
   - ${PWD}/mongodb-linux-x86_64-3.2.18/bin/mongod --dbpath ${PWD}/mongodb-linux-x86_64-3.2.18/data --logpath ${PWD}/mongodb-linux-x86_64-3.2.18/mongodb.log --fork --port 27027
-  - gem update --system # Need for Ruby 2.5.0. https://github.com/travis-ci/travis-ci/issues/8978
+  # - gem update --system # Need for Ruby 2.5.0. https://github.com/travis-ci/travis-ci/issues/8978
   - gem install bundler -v '~> 1.10'
 
 rvm:
@@ -25,7 +25,6 @@ env:
   #- RAILS=5.1.6
   #- RAILS=5.2.0
   - RAILS=6.0.0
-  - RAILS=6.0.1
 
 gemfile:
 #  - gemfiles/Gemfile.mongoid4.rb
@@ -47,11 +46,7 @@ matrix:
       rvm: 2.1
     - env: RAILS=6.0.0
       rvm: 2.3
-    - env: RAILS=6.0.1
-      rvm: 2.3
     - env: RAILS=6.0.0
-      rvm: 2.4
-    - env: RAILS=6.0.1
       rvm: 2.4
 
     # Mongoid4 requires activemodel ~> 4.0
@@ -63,8 +58,6 @@ matrix:
       env: RAILS=5.2.0
     - gemfile: gemfiles/Gemfile.mongoid4.rb
       env: RAILS=6.0.0
-    - gemfile: gemfiles/Gemfile.mongoid4.rb
-      env: RAILS=6.0.1
 
     # Mongoid5 requires activemodel ~> 4.0
     - gemfile: gemfiles/Gemfile.mongoid5.rb
@@ -92,5 +85,3 @@ matrix:
       env: RAILS=5.2.0
     - gemfile: gemfiles/Gemfile.mongo_mapper.rb
       env: RAILS=6.0.0
-    - gemfile: gemfiles/Gemfile.mongo_mapper.rb
-      env: RAILS=6.0.1
