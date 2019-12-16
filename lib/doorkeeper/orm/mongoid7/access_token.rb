@@ -7,7 +7,7 @@ module Doorkeeper
 
     include DoorkeeperMongodb::Compatible
 
-    # include DoorkeeperMongodb::Shared::Scopes
+    include DoorkeeperMongodb::Shared::Scopes
     include DoorkeeperMongodb::Mixins::Mongoid::AccessTokenMixin
 
     include Doorkeeper::OAuth::Helpers
@@ -16,7 +16,7 @@ module Doorkeeper
     include Doorkeeper::Models::Accessible
     include Doorkeeper::Models::Orderable
     include Doorkeeper::Models::SecretStorable
-    include Doorkeeper::Models::Scopes
+    # include Doorkeeper::Models::Scopes
     include Doorkeeper::Models::Reusable
 
     store_in collection: :oauth_access_tokens
