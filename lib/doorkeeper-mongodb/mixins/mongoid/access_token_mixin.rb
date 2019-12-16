@@ -150,9 +150,11 @@ module DoorkeeperMongodb
             matching_tokens = []
 
             find_access_token_in_batches(relation) do |batch|
-              tokens = batch.select do |token|
-                scopes_match?(token.scopes, scopes, application.try(:scopes))
-              end
+              criterion = scopes_match?(token.scopes, scopes, application.try(:scopes))
+              tokens = batch.all(criterion)
+              # tokens = batch.select do |token|
+              #   scopes_match?(token.scopes, scopes, application.try(:scopes))
+              # end
 
               matching_tokens.concat(tokens)
             end
