@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 DatabaseCleaner[:mongo_mapper].strategy = :truncation
 DatabaseCleaner[:mongo_mapper].clean_with :truncation
 

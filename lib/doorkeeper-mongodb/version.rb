@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module DoorkeeperMongodb
   def self.gem_version
     Gem::Version.new VERSION::STRING

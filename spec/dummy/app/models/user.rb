@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 case DOORKEEPER_ORM.to_s
 when /mongoid/
   class User

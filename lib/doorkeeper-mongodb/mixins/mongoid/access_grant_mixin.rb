@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module DoorkeeperMongodb
   module Mixins
     module Mongoid
@@ -9,6 +10,8 @@ module DoorkeeperMongodb
         include Doorkeeper::Models::Revocable
         include Doorkeeper::Models::Accessible
         include Doorkeeper::Models::Scopes
+        include Doorkeeper::Models::SecretStorable
+        include Doorkeeper::Models::ResourceOwnerable
         include BaseMixin
 
         included do
@@ -24,6 +27,10 @@ module DoorkeeperMongodb
 
           belongs_to :application, belongs_to_opts
 
+          if Doorkeeper.config.polymorphic_resource_owner?
+            belongs_to :resource_owner, polymorphic: true
+          end
+
           validates :resource_owner_id, :application_id, :token, :expires_in, :redirect_uri, presence: true
           validates :token, uniqueness: true
 
@@ -37,6 +44,22 @@ module DoorkeeperMongodb
 
         def pkce_supported?
           respond_to? :code_challenge
+        end
+
+        def plaintext_token
+          if secret_strategy.allows_restoring_secrets?
+            secret_strategy.restore_secret(self, :token)
+          else
+            @raw_token
+          end
+        end
+
+        def secret_strategy
+          ::Doorkeeper.configuration.token_secret_strategy
+        end
+
+        def fallback_secret_strategy
+          ::Doorkeeper.configuration.token_secret_fallback_strategy
         end
 
         module ClassMethods
@@ -122,7 +145,9 @@ module DoorkeeperMongodb
         # @return [String] token value
         #
         def generate_token
-          self.token = UniqueToken.generate
+          return nil unless self[:token].nil?
+          @raw_token = UniqueToken.generate
+          secret_strategy.store_secret(self, :token, @raw_token)
         end
       end
     end

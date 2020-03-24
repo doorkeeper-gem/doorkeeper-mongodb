@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'active_support/lazy_load_hooks'
 
 module Doorkeeper

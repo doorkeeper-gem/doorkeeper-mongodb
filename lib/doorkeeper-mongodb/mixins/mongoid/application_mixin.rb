@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module DoorkeeperMongodb
   module Mixins
     module Mongoid
@@ -6,6 +7,7 @@ module DoorkeeperMongodb
 
         include Doorkeeper::OAuth::Helpers
         include Doorkeeper::Models::Scopes
+        include Doorkeeper::Models::SecretStorable
         include BaseMixin
 
         included do
@@ -48,7 +50,7 @@ module DoorkeeperMongodb
             app = by_uid(uid)
             return unless app
             return app if secret.blank? && !app.confidential?
-            return unless app.secret == secret
+            return unless app.secret_matches?(secret)
             app
           end
 
@@ -63,6 +65,14 @@ module DoorkeeperMongodb
             where(uid: uid.to_s).first
           end
 
+          def secret_strategy
+            ::Doorkeeper.configuration.application_secret_strategy
+          end
+
+          def fallback_secret_strategy
+            ::Doorkeeper.configuration.application_secret_fallback_strategy
+          end
+
           # Revokes AccessToken and AccessGrant records that have not been revoked and
           # associated with the specific Application and Resource Owner.
           #
@@ -75,6 +85,23 @@ module DoorkeeperMongodb
           end
         end
 
+        def secret_matches?(input)
+          # return false if either is nil, since secure_compare depends on strings
+          # but Application secrets MAY be nil depending on confidentiality.
+          return false if input.nil? || secret.nil?
+
+          # When matching the secret by comparer function, all is well.
+          return true if secret_strategy.secret_matches?(input, secret)
+
+          # When fallback lookup is enabled, ensure applications
+          # with plain secrets can still be found
+          if fallback_secret_strategy
+            fallback_secret_strategy.secret_matches?(input, secret)
+          else
+            false
+          end
+        end
+
         # Set an application's valid redirect URIs.
         #
         # @param uris [String, Array] Newline-separated string or array the URI(s)
@@ -82,6 +109,30 @@ module DoorkeeperMongodb
         # @return [String] The redirect URI(s) seperated by newlines.
         def redirect_uri=(uris)
           super(uris.is_a?(Array) ? uris.join("\n") : uris)
+        end
+
+        def renew_secret
+          @raw_secret = Doorkeeper::OAuth::Helpers::UniqueToken.generate
+          secret_strategy.store_secret(self, :secret, @raw_secret)
+        end
+
+        def plaintext_secret
+          if secret_strategy.allows_restoring_secrets?
+            secret_strategy.restore_secret(self, :secret)
+          else
+            @raw_secret
+          end
+        end
+
+        def as_json(options = {})
+          hash = super
+
+          hash["secret"] = plaintext_secret if hash.key?("secret")
+          hash
+        end
+
+        def authorized_for_resource_owner?(resource_owner)
+          Doorkeeper.configuration.authorize_resource_owner_for_client.call(self, resource_owner)
         end
 
         private
@@ -93,14 +144,15 @@ module DoorkeeperMongodb
         end
 
         def generate_secret
-          if secret.blank?
-            self.secret = UniqueToken.generate
-          end
+          return unless secret.blank?
+
+          @raw_secret = UniqueToken.generate
+          secret_strategy.store_secret(self, :secret, @raw_secret)
         end
 
         def scopes_match_configured
           if scopes.present? &&
-              !ScopeChecker.valid?(scopes.to_s, Doorkeeper.configuration.scopes)
+              !ScopeChecker.valid?(scope_str: scopes.to_s, server_scopes: Doorkeeper.configuration.scopes)
             errors.add(:scopes, :not_match_configured)
           end
         end

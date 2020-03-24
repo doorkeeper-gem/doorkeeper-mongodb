@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'doorkeeper-mongodb/version'
 
 require 'active_model'

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module DoorkeeperMongodb
   module Mixins
     module Mongoid
@@ -7,8 +8,11 @@ module DoorkeeperMongodb
         include Doorkeeper::OAuth::Helpers
         include Doorkeeper::Models::Expirable
         include Doorkeeper::Models::Revocable
+        include Doorkeeper::Models::Reusable
         include Doorkeeper::Models::Accessible
         include Doorkeeper::Models::Scopes
+        include Doorkeeper::Models::SecretStorable
+        include Doorkeeper::Models::ResourceOwnerable
         include BaseMixin
 
         included do
@@ -23,6 +27,16 @@ module DoorkeeperMongodb
           end
 
           belongs_to :application, belongs_to_opts
+
+          if Doorkeeper.config.polymorphic_resource_owner?
+            opts = { polymorphic: true }
+
+            if ::Mongoid::VERSION[0].to_i >= 6
+              opts[:optional] = true
+            end
+
+            belongs_to :resource_owner, opts
+          end
 
           validates :token, presence: true, uniqueness: true
           validates :refresh_token, uniqueness: true, if: :use_refresh_token?
@@ -48,7 +62,7 @@ module DoorkeeperMongodb
           #   if there is no record with such token
           #
           def by_token(token)
-            where(token: token.to_s).first
+            find_by_plaintext_token(:token, token)
           end
 
 
@@ -62,7 +76,7 @@ module DoorkeeperMongodb
           #   if there is no record with such refresh token
           #
           def by_refresh_token(refresh_token)
-            where(refresh_token: refresh_token.to_s).first
+            find_by_plaintext_token(:refresh_token, refresh_token)
           end
 
           # Revokes AccessToken records that have not been revoked and associated
@@ -74,10 +88,14 @@ module DoorkeeperMongodb
           #   instance of the Resource Owner model
           #
           def revoke_all_for(application_id, resource_owner, clock = Time)
-            where(application_id:    application_id,
-                  resource_owner_id: resource_owner.id,
-                  revoked_at:        nil).
-                update_all(revoked_at: clock.now.utc)
+            by_resource_owner(resource_owner).
+              where(application_id: application_id,
+                  revoked_at: nil).
+              update_all(revoked_at: clock.now.utc)
+          end
+
+          def by_previous_refresh_token(previous_refresh_token)
+            where(refresh_token: previous_refresh_token).first
           end
 
           # Looking for not revoked Access Token with a matching set of scopes
@@ -93,15 +111,17 @@ module DoorkeeperMongodb
           # @return [Doorkeeper::AccessToken, nil] Access Token instance or
           #   nil if matching record was not found
           #
-          def matching_token_for(application, resource_owner_or_id, scopes)
-            resource_owner_id = if resource_owner_or_id.respond_to?(:to_key)
-                                  resource_owner_or_id.id
-                                else
-                                  resource_owner_or_id
-                                end
+          def matching_token_for(application, resource_owner, scopes)
+            tokens = authorized_tokens_for(application&.id, resource_owner)
+            find_matching_token(tokens, application, scopes)
+          end
 
-            tokens = authorized_tokens_for(application.try(:id), resource_owner_id)
-            tokens.detect do |token|
+          def find_access_token_in_batches(relation, *args, &block)
+            relation.all.each(&block)
+          end
+
+          def find_matching_token(relation, application, scopes)
+            relation.detect do |token|
               scopes_match?(token.scopes, scopes, application.try(:scopes))
             end
           end
@@ -126,9 +146,9 @@ module DoorkeeperMongodb
 
             (token_scopes.sort == param_scopes.sort) &&
               Doorkeeper::OAuth::Helpers::ScopeChecker.valid?(
-                param_scopes.to_s,
-                Doorkeeper.configuration.scopes,
-                app_scopes
+                scope_str: param_scopes.to_s,
+                server_scopes: Doorkeeper.configuration.scopes,
+                app_scopes: app_scopes,
               )
           end
 
@@ -149,20 +169,27 @@ module DoorkeeperMongodb
           #
           # @return [Doorkeeper::AccessToken] existing record or a new one
           #
-          def find_or_create_for(application, resource_owner_id, scopes, expires_in, use_refresh_token)
+          def find_or_create_for(application, resource_owner, scopes, expires_in, use_refresh_token)
             if Doorkeeper.configuration.reuse_access_token
-              access_token = matching_token_for(application, resource_owner_id, scopes)
+              access_token = matching_token_for(application, resource_owner, scopes)
 
-              return access_token if access_token && !access_token.expired?
+              return access_token if access_token&.reusable?
             end
 
-            create!(
+            attributes = {
               application_id:    application.try(:id),
-              resource_owner_id: resource_owner_id,
               scopes:            scopes.to_s,
               expires_in:        expires_in,
               use_refresh_token: use_refresh_token
-            )
+            }
+
+            if Doorkeeper.config.polymorphic_resource_owner?
+              attributes[:resource_owner] = resource_owner
+            else
+              attributes[:resource_owner_id] = resource_owner_id_for(resource_owner)
+            end
+
+            create!(**attributes)
           end
 
           # Looking for not revoked Access Token records that belongs to specific
@@ -175,11 +202,11 @@ module DoorkeeperMongodb
           #
           # @return [Doorkeeper::AccessToken] array of matching AccessToken objects
           #
-          def authorized_tokens_for(application_id, resource_owner_id)
+          def authorized_tokens_for(application_id, resource_owner)
             send(order_method, created_at_desc).
-                where(application_id:    application_id,
-                      resource_owner_id: resource_owner_id,
-                      revoked_at:        nil)
+              by_resource_owner(resource_owner).
+              where(application_id: application_id,
+                    revoked_at: nil)
           end
 
           # Convenience method for backwards-compatibility, return the last
@@ -195,6 +222,14 @@ module DoorkeeperMongodb
           #
           def last_authorized_token_for(application_id, resource_owner_id)
             authorized_tokens_for(application_id, resource_owner_id).first
+          end
+
+          def secret_strategy
+            ::Doorkeeper.configuration.token_secret_strategy
+          end
+
+          def fallback_secret_strategy
+            ::Doorkeeper.configuration.token_secret_fallback_strategy
           end
         end
 
@@ -248,14 +283,45 @@ module DoorkeeperMongodb
           accessible? && includes_scope?(*scopes)
         end
 
+        def plaintext_refresh_token
+          if secret_strategy.allows_restoring_secrets?
+            secret_strategy.restore_secret(self, :refresh_token)
+          else
+            @raw_refresh_token
+          end
+        end
+
+        def plaintext_token
+          if secret_strategy.allows_restoring_secrets?
+            secret_strategy.restore_secret(self, :token)
+          else
+            @raw_token
+          end
+        end
+
+        # Revokes token with `:refresh_token` equal to `:previous_refresh_token`
+        # and clears `:previous_refresh_token` attribute.
+        #
+        def revoke_previous_refresh_token!
+          return unless self.class.refresh_token_revoked_on_use?
+
+          old_refresh_token&.revoke
+          update(previous_refresh_token: "")
+        end
+
         private
+
+        def old_refresh_token
+          @old_refresh_token ||= self.class.by_previous_refresh_token(previous_refresh_token)
+        end
 
         # Generates refresh token with UniqueToken generator.
         #
         # @return [String] refresh token value
         #
         def generate_refresh_token
-          self.refresh_token = UniqueToken.generate
+          @raw_refresh_token = UniqueToken.generate
+          secret_strategy.store_secret(self, :refresh_token, @raw_refresh_token)
         end
 
         # Generates and sets the token value with the
@@ -271,13 +337,15 @@ module DoorkeeperMongodb
         def generate_token
           self.created_at ||= Time.now.utc
 
-          self.token = token_generator.generate(
+          @raw_token = token_generator.generate(
             resource_owner_id: resource_owner_id,
             scopes:            scopes,
             application:       application,
             expires_in:        expires_in,
             created_at:        created_at
           )
+          secret_strategy.store_secret(self, :token, @raw_token)
+          @raw_token
         end
 
         def token_generator
