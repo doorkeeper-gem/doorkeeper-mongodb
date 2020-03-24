@@ -2,6 +2,11 @@
 [![Gem Version](https://badge.fury.io/rb/doorkeeper-mongodb.svg)](https://badge.fury.io/rb/doorkeeper-mongodb)
 [![Build Status](https://travis-ci.org/doorkeeper-gem/doorkeeper-mongodb.svg?branch=master)](https://travis-ci.org/doorkeeper-gem/doorkeeper-mongodb)
 
+## Documentation
+
+This documentation is valid for `master` branch. Please check the documentation for the version
+of doorkeeper-mongodb you are using in: https://github.com/doorkeeper-gem/doorkeeper-mongodb/releases.
+
 ## Installation
 
 `doorkeeper-mongodb` provides [Doorkeeper](https://github.com/doorkeeper-gem/doorkeeper) support to [Mongoid](https://github.com/mongodb/mongoid)
@@ -9,17 +14,21 @@
 to your Gemfile:
 
 ``` ruby
-# For Doorkeeper < 4.4
-gem 'doorkeeper', '~> 4.3'
-gem 'doorkeeper-mongodb', '~> 4.1.0'
+# For Doorkeeper >= 5.2
+gem 'doorkeeper', '~> 5.2'
+gem 'doorkeeper-mongodb', '~> 5.2'
+
+# For Doorkeeper >= 5.0
+gem 'doorkeeper', '~> 5.0'
+gem 'doorkeeper-mongodb', '~> 5.0'
 
 # For Doorkeeper >= 4.4 && < 5.0
 gem 'doorkeeper', '~> 4.4'
 gem 'doorkeeper-mongodb', '~> 4.2'
 
-# For Doorkeeper >= 5.0
-gem 'doorkeeper', '~> 5.0'
-gem 'doorkeeper-mongodb', '~> 5.0'
+# For Doorkeeper < 4.4
+gem 'doorkeeper', '~> 4.3'
+gem 'doorkeeper-mongodb', '~> 4.1.0'
 
 # or if you want to use cutting edge version:
 # gem 'doorkeeper-mongodb', github: 'doorkeeper-gem/doorkeeper-mongodb'
