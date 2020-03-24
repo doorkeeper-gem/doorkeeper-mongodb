@@ -15,6 +15,7 @@ env:
   - RAILS=5.0
   - RAILS=5.1
   - RAILS=5.2
+  - RAILS=6.0
 
 gemfile:
   - gemfiles/Gemfile.mongoid4.rb
@@ -27,6 +28,9 @@ services:
 
 matrix:
   exclude:
+    - env: RAILS=6.0
+      rvm: 2.4
+
     # Mongoid4 requires activemodel ~> 4.0
     - gemfile: gemfiles/Gemfile.mongoid4.rb
       env: RAILS=5.0

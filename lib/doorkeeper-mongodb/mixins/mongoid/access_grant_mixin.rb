@@ -145,7 +145,7 @@ module DoorkeeperMongodb
         # @return [String] token value
         #
         def generate_token
-          return nil unless self[:token].nil?
+          return if self[:token].present?
           @raw_token = UniqueToken.generate
           secret_strategy.store_secret(self, :token, @raw_token)
         end

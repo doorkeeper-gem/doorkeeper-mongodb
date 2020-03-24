@@ -104,7 +104,7 @@ module DoorkeeperMongodb
           #
           # @param application [Doorkeeper::Application]
           #   Application instance
-          # @param resource_owner_or_id [ActiveRecord::Base, Integer]
+          # @param resource_owner [Mongoid::Document, Integer]
           #   Resource Owner model instance or it's ID
           # @param scopes [String, Doorkeeper::OAuth::Scopes]
           #   set of scopes
