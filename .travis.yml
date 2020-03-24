@@ -51,6 +51,12 @@ matrix:
     - gemfile: gemfiles/Gemfile.mongoid5.rb
       env: RAILS=6.0
 
+    # Mongoid6 requires activemodel >= 5.1, < 6.0.0
+    - gemfile: gemfiles/Gemfile.mongoid6.rb
+      env: RAILS=5.0
+    - gemfile: gemfiles/Gemfile.mongoid6.rb
+      env: RAILS=6.0
+
      # Mongoid7 requires activemodel < 6.0.0, >= 5.1
     - gemfile: gemfiles/Gemfile.mongoid7.rb
       env: RAILS=5.0
