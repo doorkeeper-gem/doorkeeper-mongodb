@@ -4,7 +4,6 @@
 log/*.log
 pkg/
 spec/dummy/db/*.sqlite3
-Gemfile.lock
 gemfiles/*.lock
 .rvmrc
 *.swp
@@ -14,7 +13,6 @@ spec
 !spec/support/orm/mongo*
 *.gem
 
-/Gemfile
 coverage
 
 .idea/

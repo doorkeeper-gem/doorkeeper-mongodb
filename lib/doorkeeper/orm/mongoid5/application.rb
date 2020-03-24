@@ -19,7 +19,7 @@ module Doorkeeper
 
     index({ uid: 1 }, unique: true)
 
-    has_many :authorized_tokens, class_name: 'Doorkeeper::AccessToken'
+    has_many :authorized_tokens, class_name: "Doorkeeper::AccessToken"
 
     def self.authorized_for(resource_owner)
       ids = AccessToken.where(

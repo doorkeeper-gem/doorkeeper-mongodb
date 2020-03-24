@@ -1,9 +1,3 @@
-LineLength:
-  Exclude:
-    - spec/**/*
-
-StringLiterals:
-  Enabled: false
-
-TrailingBlankLines:
-  Enabled: true
+rubocop:
+  config_file: .rubocop.yml
+  version: 0.75.0

@@ -3,13 +3,6 @@ sudo: false
 cache: bundler
 
 before_install:
-  # MongoMapper works only with MongoDB <= 3.2.x
-  - wget http://fastdl.mongodb.org/linux/mongodb-linux-x86_64-3.2.18.tgz
-  - tar xzf mongodb-linux-x86_64-3.2.18.tgz
-  - ${PWD}/mongodb-linux-x86_64-3.2.18/bin/mongod --version
-  - mkdir ${PWD}/mongodb-linux-x86_64-3.2.18/data
-  # Bind on another port in order to test mongo_mapper separately
-  - ${PWD}/mongodb-linux-x86_64-3.2.18/bin/mongod --dbpath ${PWD}/mongodb-linux-x86_64-3.2.18/data --logpath ${PWD}/mongodb-linux-x86_64-3.2.18/mongodb.log --fork --port 27027
   - gem install bundler -v '~> 1.10'
 
 rvm:
@@ -28,7 +21,6 @@ gemfile:
   - gemfiles/Gemfile.mongoid5.rb
   - gemfiles/Gemfile.mongoid6.rb
   - gemfiles/Gemfile.mongoid7.rb
-  - gemfiles/Gemfile.mongo_mapper.rb
 
 services:
   - mongodb
@@ -67,6 +59,3 @@ matrix:
       env: RAILS=5.0.7
     - gemfile: gemfiles/Gemfile.mongoid7.rb
       rvm: 2.1
-
-    - gemfile: gemfiles/Gemfile.mongo_mapper.rb
-      env: RAILS=5.2.0

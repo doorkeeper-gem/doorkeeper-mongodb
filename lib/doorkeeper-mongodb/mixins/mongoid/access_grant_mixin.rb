@@ -16,7 +16,7 @@ module DoorkeeperMongodb
 
         included do
           belongs_to_opts = {
-            class_name: 'Doorkeeper::Application',
+            class_name: "Doorkeeper::Application",
             inverse_of: :access_grants
           }
 
@@ -130,7 +130,7 @@ module DoorkeeperMongodb
           # @return [#to_s] An encoded code challenge based on the provided verifier suitable for PKCE validation
           def generate_code_challenge(code_verifier)
             padded_result = Base64.urlsafe_encode64(Digest::SHA256.digest(code_verifier))
-            padded_result.split('=')[0] # Remove any trailing '='
+            padded_result.split("=")[0] # Remove any trailing '='
           end
 
           def pkce_supported?

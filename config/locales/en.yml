@@ -27,6 +27,3 @@ en:
 
   mongoid:
     <<: *orm
-
-  mongo_mapper:
-    <<: *orm
