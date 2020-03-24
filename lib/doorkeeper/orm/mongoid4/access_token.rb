@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Doorkeeper
   class AccessToken
     include Mongoid::Document
@@ -11,6 +13,7 @@ module Doorkeeper
     store_in collection: :oauth_access_tokens
 
     field :resource_owner_id, type: BSON::ObjectId
+    field :resource_owner_type, type: String
     field :token, type: String
     field :refresh_token, type: String
     field :previous_refresh_token, type: String
@@ -25,7 +28,7 @@ module Doorkeeper
     end
 
     def self.refresh_token_revoked_on_use?
-      fields.collect { |field| field[0] }.include?('previous_refresh_token')
+      fields.collect { |field| field[0] }.include?("previous_refresh_token")
     end
 
     def self.created_at_desc

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Doorkeeper
   class Application
     include Mongoid::Document
@@ -18,12 +20,20 @@ module Doorkeeper
 
     index({ uid: 1 }, unique: true)
 
-    has_many :authorized_tokens, class_name: 'Doorkeeper::AccessToken'
+    has_many_opts = {
+      class_name: "Doorkeeper::AccessToken",
+    }
+
+    if DoorkeeperMongodb.doorkeeper_version?(5, 3)
+      has_many_opts[:class_name] = Doorkeeper.config.access_token_class
+    end
+
+    has_many :authorized_tokens, has_many_opts
 
     def self.authorized_for(resource_owner)
       ids = AccessToken.where(
         resource_owner_id: resource_owner.id,
-        revoked_at: nil
+        revoked_at: nil,
       ).map(&:application_id)
 
       find(ids)

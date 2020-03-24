@@ -1,0 +1,122 @@
+GIT
+  remote: https://github.com/rspec/rspec-core.git
+  revision: 002ebcb65324bca7b3ee044e22f4c02133fce14d
+  specs:
+    rspec-core (3.10.0.pre)
+      rspec-support (= 3.10.0.pre)
+
+GIT
+  remote: https://github.com/rspec/rspec-expectations.git
+  revision: 9f224eaeb5c6d7eaaab0f7f6e355efd9329328f8
+  specs:
+    rspec-expectations (3.10.0.pre)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (= 3.10.0.pre)
+
+GIT
+  remote: https://github.com/rspec/rspec-mocks.git
+  revision: 81c17e89b2722cb225d602e08b600e4a4f6148a4
+  specs:
+    rspec-mocks (3.10.0.pre)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (= 3.10.0.pre)
+
+GIT
+  remote: https://github.com/rspec/rspec-support.git
+  revision: 63c03e5e6f0ac858398933f820d37087f57c315a
+  specs:
+    rspec-support (3.10.0.pre)
+
+PATH
+  remote: doorkeeper
+  specs:
+    doorkeeper (5.3.0)
+      railties (>= 5)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    actionpack (5.2.4.2)
+      actionview (= 5.2.4.2)
+      activesupport (= 5.2.4.2)
+      rack (~> 2.0, >= 2.0.8)
+      rack-test (>= 0.6.3)
+      rails-dom-testing (~> 2.0)
+      rails-html-sanitizer (~> 1.0, >= 1.0.2)
+    actionview (5.2.4.2)
+      activesupport (= 5.2.4.2)
+      builder (~> 3.1)
+      erubi (~> 1.4)
+      rails-dom-testing (~> 2.0)
+      rails-html-sanitizer (~> 1.0, >= 1.0.3)
+    activemodel (5.2.4.2)
+      activesupport (= 5.2.4.2)
+    activesupport (5.2.4.2)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 0.7, < 2)
+      minitest (~> 5.1)
+      tzinfo (~> 1.1)
+    bson (4.8.2)
+    builder (3.2.4)
+    concurrent-ruby (1.1.6)
+    crass (1.0.6)
+    diff-lcs (1.3)
+    erubi (1.9.0)
+    i18n (1.8.2)
+      concurrent-ruby (~> 1.0)
+    loofah (2.4.0)
+      crass (~> 1.0.2)
+      nokogiri (>= 1.5.9)
+    method_source (1.0.0)
+    mini_portile2 (2.4.0)
+    minitest (5.14.0)
+    mongo (2.11.4)
+      bson (>= 4.4.2, < 5.0.0)
+    mongoid (6.4.4)
+      activemodel (>= 5.1, < 6.0.0)
+      mongo (>= 2.5.1, < 3.0.0)
+    nokogiri (1.10.9)
+      mini_portile2 (~> 2.4.0)
+    rack (2.2.2)
+    rack-test (1.1.0)
+      rack (>= 1.0, < 3)
+    rails-dom-testing (2.0.3)
+      activesupport (>= 4.2.0)
+      nokogiri (>= 1.6)
+    rails-html-sanitizer (1.3.0)
+      loofah (~> 2.3)
+    railties (5.2.4.2)
+      actionpack (= 5.2.4.2)
+      activesupport (= 5.2.4.2)
+      method_source
+      rake (>= 0.8.7)
+      thor (>= 0.19.0, < 2.0)
+    rake (13.0.1)
+    rspec-rails (4.0.0.beta3)
+      actionpack (>= 4.2)
+      activesupport (>= 4.2)
+      railties (>= 4.2)
+      rspec-core (~> 3.8)
+      rspec-expectations (~> 3.8)
+      rspec-mocks (~> 3.8)
+      rspec-support (~> 3.8)
+    thor (1.0.1)
+    thread_safe (0.3.6)
+    tzinfo (1.2.6)
+      thread_safe (~> 0.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  doorkeeper!
+  mongoid
+  rake
+  rspec-core!
+  rspec-expectations!
+  rspec-mocks!
+  rspec-rails (= 4.0.0.beta3)
+  rspec-support!
+
+BUNDLED WITH
+   1.17.3

@@ -3,77 +3,60 @@ sudo: false
 cache: bundler
 
 before_install:
-  # MongoMapper works only with MongoDB <= 3.2.x
-  - wget http://fastdl.mongodb.org/linux/mongodb-linux-x86_64-3.2.18.tgz
-  - tar xzf mongodb-linux-x86_64-3.2.18.tgz
-  - ${PWD}/mongodb-linux-x86_64-3.2.18/bin/mongod --version
-  - mkdir ${PWD}/mongodb-linux-x86_64-3.2.18/data
-  # Bind on another port in order to test mongo_mapper separately
-  - ${PWD}/mongodb-linux-x86_64-3.2.18/bin/mongod --dbpath ${PWD}/mongodb-linux-x86_64-3.2.18/data --logpath ${PWD}/mongodb-linux-x86_64-3.2.18/mongodb.log --fork --port 27027
-  - gem update --system # Need for Ruby 2.5.0. https://github.com/travis-ci/travis-ci/issues/8978
   - gem install bundler -v '~> 1.10'
 
 rvm:
-  - 2.1
-  - 2.2
-  - 2.3
   - 2.4
   - 2.5
+  - 2.6
+  - 2.7
 
 env:
-  - RAILS=4.2.6
-  - RAILS=5.0.7
-  - RAILS=5.1.6
-  - RAILS=5.2.0
+  - RAILS=5.0
+  - RAILS=5.1
+  - RAILS=5.2
+  - RAILS=6.0
 
 gemfile:
   - gemfiles/Gemfile.mongoid4.rb
   - gemfiles/Gemfile.mongoid5.rb
   - gemfiles/Gemfile.mongoid6.rb
   - gemfiles/Gemfile.mongoid7.rb
-  - gemfiles/Gemfile.mongo_mapper.rb
 
 services:
   - mongodb
 
 matrix:
   exclude:
-    - env: RAILS=5.0.7
-      rvm: 2.1
-    - env: RAILS=5.1.6
-      rvm: 2.1
-    - env: RAILS=5.2.0
-      rvm: 2.1
+    - env: RAILS=6.0
+      rvm: 2.4
 
     # Mongoid4 requires activemodel ~> 4.0
     - gemfile: gemfiles/Gemfile.mongoid4.rb
-      env: RAILS=5.0.7
+      env: RAILS=5.0
     - gemfile: gemfiles/Gemfile.mongoid4.rb
-      env: RAILS=5.1.6
+      env: RAILS=5.1
     - gemfile: gemfiles/Gemfile.mongoid4.rb
-      env: RAILS=5.2.0
+      env: RAILS=5.2
+    - gemfile: gemfiles/Gemfile.mongoid4.rb
+      env: RAILS=6.0
 
     # Mongoid5 requires activemodel ~> 4.0
     - gemfile: gemfiles/Gemfile.mongoid5.rb
-      env: RAILS=5.0.7
+      env: RAILS=5.0
     - gemfile: gemfiles/Gemfile.mongoid5.rb
-      env: RAILS=5.1.6
+      env: RAILS=5.1
     - gemfile: gemfiles/Gemfile.mongoid5.rb
-      env: RAILS=5.2.0
+      env: RAILS=5.2
+    - gemfile: gemfiles/Gemfile.mongoid5.rb
+      env: RAILS=6.0
 
-      # Mongoid6 requires activemodel ~> 5.0
+    # Mongoid6 requires activemodel >= 5.1, < 6.0.0
     - gemfile: gemfiles/Gemfile.mongoid6.rb
-      env: RAILS=4.2.6
+      env: RAILS=5.0
     - gemfile: gemfiles/Gemfile.mongoid6.rb
-      rvm: 2.1
+      env: RAILS=6.0
 
-     # Mongoid7 requires activemodel ~> 5.1
+     # Mongoid7 requires activemodel < 6.0.0, >= 5.1
     - gemfile: gemfiles/Gemfile.mongoid7.rb
-      env: RAILS=4.2.6
-    - gemfile: gemfiles/Gemfile.mongoid7.rb
-      env: RAILS=5.0.7
-    - gemfile: gemfiles/Gemfile.mongoid7.rb
-      rvm: 2.1
-
-    - gemfile: gemfiles/Gemfile.mongo_mapper.rb
-      env: RAILS=5.2.0
+      env: RAILS=5.0

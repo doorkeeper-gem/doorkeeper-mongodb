@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DoorkeeperMongodb
   module Mixins
     module Mongoid
@@ -9,13 +11,19 @@ module DoorkeeperMongodb
         include Doorkeeper::Models::Revocable
         include Doorkeeper::Models::Accessible
         include Doorkeeper::Models::Scopes
+        include Doorkeeper::Models::SecretStorable
+        include Doorkeeper::Orm::Concerns::Mongoid::ResourceOwnerable
         include BaseMixin
 
         included do
           belongs_to_opts = {
-            class_name: 'Doorkeeper::Application',
-            inverse_of: :access_grants
+            class_name: "Doorkeeper::Application",
+            inverse_of: :access_grants,
           }
+
+          if DoorkeeperMongodb.doorkeeper_version?(5, 3)
+            belongs_to_opts[:class_name] = Doorkeeper.config.application_class
+          end
 
           # optional associations added in Mongoid 6
           if ::Mongoid::VERSION[0].to_i >= 6
@@ -23,6 +31,10 @@ module DoorkeeperMongodb
           end
 
           belongs_to :application, belongs_to_opts
+
+          if Doorkeeper::VERSION::MINOR > 3 && Doorkeeper.config.polymorphic_resource_owner?
+            belongs_to :resource_owner, polymorphic: true
+          end
 
           validates :resource_owner_id, :application_id, :token, :expires_in, :redirect_uri, presence: true
           validates :token, uniqueness: true
@@ -39,6 +51,14 @@ module DoorkeeperMongodb
           respond_to? :code_challenge
         end
 
+        def plaintext_token
+          if secret_strategy.allows_restoring_secrets?
+            secret_strategy.restore_secret(self, :token)
+          else
+            @raw_token
+          end
+        end
+
         module ClassMethods
           # Searches for Doorkeeper::AccessGrant record with the
           # specific token value.
@@ -49,7 +69,7 @@ module DoorkeeperMongodb
           #   if there is no record with such token
           #
           def by_token(token)
-            where(token: token.to_s).first
+            find_by_plaintext_token(:token, token)
           end
 
           # Revokes AccessGrant records that have not been revoked and associated
@@ -57,14 +77,13 @@ module DoorkeeperMongodb
           #
           # @param application_id [Integer]
           #   ID of the Application
-          # @param resource_owner [ActiveRecord::Base]
+          # @param resource_owner [Mongoid::Document, Integer]
           #   instance of the Resource Owner model
           #
           def revoke_all_for(application_id, resource_owner, clock = Time)
-            where(application_id:    application_id,
-                  resource_owner_id: resource_owner.id,
-                  revoked_at:        nil)
-                .update_all(revoked_at: clock.now.utc)
+            by_resource_owner(resource_owner)
+              .where(application_id: application_id, revoked_at: nil)
+              .update_all(revoked_at: clock.now.utc)
           end
 
           # Implements PKCE code_challenge encoding without base64 padding as described in the spec.
@@ -107,11 +126,25 @@ module DoorkeeperMongodb
           # @return [#to_s] An encoded code challenge based on the provided verifier suitable for PKCE validation
           def generate_code_challenge(code_verifier)
             padded_result = Base64.urlsafe_encode64(Digest::SHA256.digest(code_verifier))
-            padded_result.split('=')[0] # Remove any trailing '='
+            padded_result.split("=")[0] # Remove any trailing '='
           end
 
           def pkce_supported?
             new.pkce_supported?
+          end
+
+          ##
+          # Determines the secret storing transformer
+          # Unless configured otherwise, uses the plain secret strategy
+          def secret_strategy
+            ::Doorkeeper.config.token_secret_strategy
+          end
+
+          ##
+          # Determine the fallback storing strategy
+          # Unless configured, there will be no fallback
+          def fallback_secret_strategy
+            ::Doorkeeper.config.token_secret_fallback_strategy
           end
         end
 
@@ -122,7 +155,10 @@ module DoorkeeperMongodb
         # @return [String] token value
         #
         def generate_token
-          self.token = UniqueToken.generate
+          return if self[:token].present?
+
+          @raw_token = UniqueToken.generate
+          secret_strategy.store_secret(self, :token, @raw_token)
         end
       end
     end

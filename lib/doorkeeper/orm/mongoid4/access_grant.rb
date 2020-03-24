@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Doorkeeper
   class AccessGrant
     include Mongoid::Document
@@ -11,6 +13,7 @@ module Doorkeeper
     store_in collection: :oauth_access_grants
 
     field :resource_owner_id, type: BSON::ObjectId
+    field :resource_owner_type, type: String
     field :token, type: String
     field :expires_in, type: Integer
     field :redirect_uri, type: String

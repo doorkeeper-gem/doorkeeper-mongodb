@@ -1,4 +1,11 @@
 en:
+  activerecord:
+    errors:
+      models:
+        doorkeeper/application:
+          attributes:
+            redirect_uri:
+              unspecified_scheme: 'must specify a scheme.'
   orm: &orm
     attributes:
       doorkeeper/application:
@@ -14,11 +21,9 @@ en:
               relative_uri: 'must be an absolute URI.'
               secured_uri: 'must be an HTTPS/SSL URI.'
               forbidden_uri: 'is forbidden by the server.'
+              unspecified_scheme: 'must specify a scheme.'
             scopes:
               not_match_configured: "doesn't match configured on the server."
 
   mongoid:
-    <<: *orm
-
-  mongo_mapper:
     <<: *orm
