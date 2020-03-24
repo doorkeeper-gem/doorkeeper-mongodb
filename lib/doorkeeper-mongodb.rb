@@ -30,7 +30,7 @@ require "doorkeeper/orm/mongoid7"
 
 module DoorkeeperMongodb
   def load_locales
-    locales_dir = File.expand_path("../../config/locales", __FILE__)
+    locales_dir = File.expand_path("../config/locales", __dir__)
     locales     = Dir[File.join(locales_dir, "*.yml")]
 
     I18n.load_path |= locales

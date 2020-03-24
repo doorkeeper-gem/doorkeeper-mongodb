@@ -13,7 +13,7 @@ module DoorkeeperMongodb
 
         included do
           has_many_options = {
-            dependent: :delete
+            dependent: :delete,
           }
 
           # Mongoid7 dropped :delete option
@@ -52,6 +52,7 @@ module DoorkeeperMongodb
             return unless app
             return app if secret.blank? && !app.confidential?
             return unless app.secret_matches?(secret)
+
             app
           end
 
@@ -142,9 +143,7 @@ module DoorkeeperMongodb
         private
 
         def generate_uid
-          if uid.blank?
-            self.uid = UniqueToken.generate
-          end
+          self.uid = UniqueToken.generate if uid.blank?
         end
 
         def generate_secret
@@ -156,7 +155,7 @@ module DoorkeeperMongodb
 
         def scopes_match_configured
           if scopes.present? &&
-              !ScopeChecker.valid?(scope_str: scopes.to_s, server_scopes: Doorkeeper.configuration.scopes)
+             !ScopeChecker.valid?(scope_str: scopes.to_s, server_scopes: Doorkeeper.configuration.scopes)
             errors.add(:scopes, :not_match_configured)
           end
         end

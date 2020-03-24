@@ -19,8 +19,12 @@ module DoorkeeperMongodb
         included do
           belongs_to_opts = {
             class_name: "Doorkeeper::Application",
-            inverse_of: :access_tokens
+            inverse_of: :access_tokens,
           }
+
+          if DoorkeeperMongodb.doorkeeper_version?(5, 3)
+            belongs_to_opts[:class_name] = Doorkeeper.config.application_class
+          end
 
           # optional associations added in Mongoid 6
           if ::Mongoid::VERSION[0].to_i >= 6
@@ -65,7 +69,6 @@ module DoorkeeperMongodb
           def by_token(token)
             find_by_plaintext_token(:token, token)
           end
-
 
           # Returns an instance of the Doorkeeper::AccessToken
           # with specific token value.
@@ -116,7 +119,7 @@ module DoorkeeperMongodb
             find_matching_token(tokens, application, scopes)
           end
 
-          def find_access_token_in_batches(relation, *args, &block)
+          def find_access_token_in_batches(relation, *_args, &block)
             relation.all.each(&block)
           end
 
@@ -177,10 +180,10 @@ module DoorkeeperMongodb
             end
 
             attributes = {
-              application_id:    application.try(:id),
-              scopes:            scopes.to_s,
-              expires_in:        expires_in,
-              use_refresh_token: use_refresh_token
+              application_id: application.try(:id),
+              scopes: scopes.to_s,
+              expires_in: expires_in,
+              use_refresh_token: use_refresh_token,
             }
 
             if Doorkeeper::VERSION::MINOR > 3 && Doorkeeper.config.polymorphic_resource_owner?
@@ -232,7 +235,6 @@ module DoorkeeperMongodb
           end
         end
 
-
         # Access Token type: Bearer.
         # @see https://tools.ietf.org/html/rfc6750
         #   The OAuth 2.0 Authorization Framework: Bearer Token Usage
@@ -252,10 +254,10 @@ module DoorkeeperMongodb
         def as_json(_options = {})
           {
             resource_owner_id: resource_owner_id,
-            scope:             scopes,
-            expires_in:        expires_in_seconds,
-            application:       { uid: application.try(:uid) },
-            created_at:        created_at.to_i
+            scope: scopes,
+            expires_in: expires_in_seconds,
+            application: { uid: application.try(:uid) },
+            created_at: created_at.to_i,
           }
         end
 
@@ -361,10 +363,10 @@ module DoorkeeperMongodb
 
           @raw_token = token_generator.generate(
             resource_owner_id: resource_owner_id,
-            scopes:            scopes,
-            application:       application,
-            expires_in:        expires_in,
-            created_at:        created_at,
+            scopes: scopes,
+            application: application,
+            expires_in: expires_in,
+            created_at: created_at,
           )
           secret_strategy.store_secret(self, :token, @raw_token)
           @raw_token

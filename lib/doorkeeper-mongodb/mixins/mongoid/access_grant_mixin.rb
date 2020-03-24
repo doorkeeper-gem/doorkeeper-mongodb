@@ -18,8 +18,12 @@ module DoorkeeperMongodb
         included do
           belongs_to_opts = {
             class_name: "Doorkeeper::Application",
-            inverse_of: :access_grants
+            inverse_of: :access_grants,
           }
+
+          if DoorkeeperMongodb.doorkeeper_version?(5, 3)
+            belongs_to_opts[:class_name] = Doorkeeper.config.application_class
+          end
 
           # optional associations added in Mongoid 6
           if ::Mongoid::VERSION[0].to_i >= 6
@@ -152,6 +156,7 @@ module DoorkeeperMongodb
         #
         def generate_token
           return if self[:token].present?
+
           @raw_token = UniqueToken.generate
           secret_strategy.store_secret(self, :token, @raw_token)
         end
