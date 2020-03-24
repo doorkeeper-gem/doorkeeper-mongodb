@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-ENV["RAILS"] ||= "4.2"
+ENV["RAILS"] ||= "5.0"
 ENV["DOORKEEPER"] ||= "5.0"
 
 source "https://rubygems.org"

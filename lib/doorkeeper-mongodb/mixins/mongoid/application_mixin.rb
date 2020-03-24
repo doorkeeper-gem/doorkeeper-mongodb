@@ -128,6 +128,9 @@ module DoorkeeperMongodb
         def as_json(options = {})
           hash = super
 
+          if hash.key?("_id") || (options && Array.wrap(options[:only]).include?(:id))
+            hash["id"] = id.to_s
+          end
           hash["secret"] = plaintext_secret if hash.key?("secret")
           hash
         end
