@@ -12,7 +12,7 @@ module DoorkeeperMongodb
         include Doorkeeper::Models::Accessible
         include Doorkeeper::Models::Scopes
         include Doorkeeper::Models::SecretStorable
-        include Doorkeeper::Models::ResourceOwnerable
+        include Doorkeeper::Orm::Concerns::Mongoid::ResourceOwnerable
         include BaseMixin
 
         included do

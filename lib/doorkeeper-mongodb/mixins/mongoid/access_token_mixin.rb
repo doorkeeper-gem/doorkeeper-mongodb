@@ -13,7 +13,7 @@ module DoorkeeperMongodb
         include Doorkeeper::Models::Accessible
         include Doorkeeper::Models::Scopes
         include Doorkeeper::Models::SecretStorable
-        include Doorkeeper::Models::ResourceOwnerable
+        include Doorkeeper::Orm::Concerns::Mongoid::ResourceOwnerable
         include BaseMixin
 
         included do
@@ -85,14 +85,13 @@ module DoorkeeperMongodb
           #
           # @param application_id [Integer]
           #   ID of the Application
-          # @param resource_owner [ActiveRecord::Base]
+          # @param resource_owner [Mongoid::Document]
           #   instance of the Resource Owner model
           #
           def revoke_all_for(application_id, resource_owner, clock = Time)
-            by_resource_owner(resource_owner).
-              where(application_id: application_id,
-                  revoked_at: nil,).
-              update_all(revoked_at: clock.now.utc)
+            by_resource_owner(resource_owner)
+              .where(application_id: application_id, revoked_at: nil)
+              .update_all(revoked_at: clock.now.utc)
           end
 
           def by_previous_refresh_token(previous_refresh_token)
@@ -204,9 +203,9 @@ module DoorkeeperMongodb
           # @return [Doorkeeper::AccessToken] array of matching AccessToken objects
           #
           def authorized_tokens_for(application_id, resource_owner)
-            send(order_method, created_at_desc).
-              by_resource_owner(resource_owner).
-              where(application_id: application_id, revoked_at: nil)
+            send(order_method, created_at_desc)
+              .by_resource_owner(resource_owner)
+              .where(application_id: application_id, revoked_at: nil)
           end
 
           # Convenience method for backwards-compatibility, return the last

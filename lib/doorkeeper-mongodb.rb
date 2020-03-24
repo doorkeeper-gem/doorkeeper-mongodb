@@ -14,6 +14,7 @@ require "doorkeeper-mongodb/compatible"
 require "doorkeeper-mongodb/shared/scopes"
 
 require "doorkeeper/orm/concerns/mongoid/ownership"
+require "doorkeeper/orm/concerns/mongoid/resource_ownerable"
 
 require "doorkeeper-mongodb/mixins/mongoid/base_mixin"
 require "doorkeeper-mongodb/mixins/mongoid/access_grant_mixin"
@@ -36,6 +37,13 @@ module DoorkeeperMongodb
   end
 
   module_function :load_locales
+
+  def doorkeeper_version?(major, minor)
+    Doorkeeper::VERSION::MAJOR >= major &&
+      Doorkeeper::VERSION::MINOR >= minor
+  end
+
+  module_function :doorkeeper_version?
 end
 
 DoorkeeperMongodb.load_locales
