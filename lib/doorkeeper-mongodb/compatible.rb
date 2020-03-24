@@ -25,7 +25,7 @@ module DoorkeeperMongodb
     end
 
     def update_column(column, value)
-      update(column => value)
+      update_attribute(column, value)
     end
 
     def lock!(_ = true)

@@ -10,7 +10,17 @@ module DoorkeeperMongodb
       end
 
       def scopes=(value)
-        write_attribute :scopes, value
+        scopes = if value.is_a?(Array)
+                   Doorkeeper::OAuth::Scopes.from_array(value).to_s
+                 else
+                   Doorkeeper::OAuth::Scopes.from_string(value.to_s).to_s
+                 end
+
+        write_attribute :scopes, scopes
+      end
+
+      def scopes_string
+        self[:scopes]
       end
     end
   end

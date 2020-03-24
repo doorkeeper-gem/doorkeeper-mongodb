@@ -28,7 +28,7 @@ module DoorkeeperMongodb
 
           belongs_to :application, belongs_to_opts
 
-          if Doorkeeper.config.polymorphic_resource_owner?
+          if Doorkeeper::VERSION::MINOR > 3 && Doorkeeper.config.polymorphic_resource_owner?
             belongs_to :resource_owner, polymorphic: true
           end
 
