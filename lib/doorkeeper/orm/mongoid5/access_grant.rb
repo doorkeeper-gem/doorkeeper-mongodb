@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Doorkeeper
   class AccessGrant
     include Mongoid::Document

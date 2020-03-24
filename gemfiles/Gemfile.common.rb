@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 ENV["RAILS"] ||= "4.2"
 ENV["DOORKEEPER"] ||= "5.0"
 

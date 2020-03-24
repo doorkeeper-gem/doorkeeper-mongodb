@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module DoorkeeperMongodb
   module Compatible
     extend ActiveSupport::Concern

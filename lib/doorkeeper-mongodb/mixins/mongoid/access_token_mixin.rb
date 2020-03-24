@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module DoorkeeperMongodb
   module Mixins
     module Mongoid
@@ -90,7 +91,7 @@ module DoorkeeperMongodb
           def revoke_all_for(application_id, resource_owner, clock = Time)
             by_resource_owner(resource_owner).
               where(application_id: application_id,
-                  revoked_at: nil).
+                  revoked_at: nil,).
               update_all(revoked_at: clock.now.utc)
           end
 
@@ -158,7 +159,7 @@ module DoorkeeperMongodb
           #
           # @param application [Doorkeeper::Application]
           #   Application instance
-          # @param resource_owner_id [ActiveRecord::Base, Integer]
+          # @param resource_owner [Mongoid::Document, Integer]
           #   Resource Owner model instance or it's ID
           # @param scopes [#to_s]
           #   set of scopes (any object that responds to `#to_s`)
@@ -197,7 +198,7 @@ module DoorkeeperMongodb
           #
           # @param application_id [Integer]
           #   ID of the Application model instance
-          # @param resource_owner_id [Integer]
+          # @param resource_owner [Mongoid::Document]
           #   ID of the Resource Owner model instance
           #
           # @return [Doorkeeper::AccessToken] array of matching AccessToken objects
@@ -205,8 +206,7 @@ module DoorkeeperMongodb
           def authorized_tokens_for(application_id, resource_owner)
             send(order_method, created_at_desc).
               by_resource_owner(resource_owner).
-              where(application_id: application_id,
-                    revoked_at: nil)
+              where(application_id: application_id, revoked_at: nil)
           end
 
           # Convenience method for backwards-compatibility, return the last
@@ -214,14 +214,14 @@ module DoorkeeperMongodb
           #
           # @param application_id [Integer]
           #   ID of the Application model instance
-          # @param resource_owner_id [Integer]
+          # @param resource_owner [Mongoid::Document, Integer]
           #   ID of the Resource Owner model instance
           #
           # @return [Doorkeeper::AccessToken, nil] matching AccessToken object or
           #   nil if nothing was found
           #
-          def last_authorized_token_for(application_id, resource_owner_id)
-            authorized_tokens_for(application_id, resource_owner_id).first
+          def last_authorized_token_for(application_id, resource_owner)
+            authorized_tokens_for(application_id, resource_owner).first
           end
 
           def secret_strategy
@@ -269,7 +269,22 @@ module DoorkeeperMongodb
         #
         def same_credential?(access_token)
           application_id == access_token.application_id &&
+            same_resource_owner?(access_token)
+        end
+
+        # Indicates whether the token instance have the same credential
+        # as the other Access Token.
+        #
+        # @param access_token [Doorkeeper::AccessToken] other token
+        #
+        # @return [Boolean] true if credentials are same of false in other cases
+        #
+        def same_resource_owner?(access_token)
+          if Doorkeeper.configuration.polymorphic_resource_owner?
+            resource_owner == access_token.resource_owner
+          else
             resource_owner_id == access_token.resource_owner_id
+          end
         end
 
         # Indicates if token is acceptable for specific scopes.
@@ -283,6 +298,8 @@ module DoorkeeperMongodb
           accessible? && includes_scope?(*scopes)
         end
 
+        # We keep a volatile copy of the raw refresh token for initial communication
+        # The stored refresh_token may be mapped and not available in cleartext.
         def plaintext_refresh_token
           if secret_strategy.allows_restoring_secrets?
             secret_strategy.restore_secret(self, :refresh_token)
@@ -291,6 +308,12 @@ module DoorkeeperMongodb
           end
         end
 
+        # We keep a volatile copy of the raw token for initial communication
+        # The stored refresh_token may be mapped and not available in cleartext.
+        #
+        # Some strategies allow restoring stored secrets (e.g. symmetric encryption)
+        # while hashing strategies do not, so you cannot rely on this value
+        # returning a present value for persisted tokens.
         def plaintext_token
           if secret_strategy.allows_restoring_secrets?
             secret_strategy.restore_secret(self, :token)
@@ -342,7 +365,7 @@ module DoorkeeperMongodb
             scopes:            scopes,
             application:       application,
             expires_in:        expires_in,
-            created_at:        created_at
+            created_at:        created_at,
           )
           secret_strategy.store_secret(self, :token, @raw_token)
           @raw_token

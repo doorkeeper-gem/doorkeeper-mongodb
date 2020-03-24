@@ -5,7 +5,7 @@ AllCops:
   Exclude:
     - "spec/dummy/db/*"
     - "spec/dummy/config/*"
-    - "Dangerfile"
+    - "doorkeepper/**/*"
     - "gemfiles/*.gemfile"
 
 Metrics/BlockLength:

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module DoorkeeperMongodb
   module Mixins
     module Mongoid
@@ -80,14 +81,13 @@ module DoorkeeperMongodb
           #
           # @param application_id [Integer]
           #   ID of the Application
-          # @param resource_owner [ActiveRecord::Base]
+          # @param resource_owner [Mongoid::Document, Integer]
           #   instance of the Resource Owner model
           #
           def revoke_all_for(application_id, resource_owner, clock = Time)
-            where(application_id:    application_id,
-                  resource_owner_id: resource_owner.id,
-                  revoked_at:        nil)
-                .update_all(revoked_at: clock.now.utc)
+            by_resource_owner(resource_owner)
+              .where(application_id: application_id, revoked_at: nil)
+              .update_all(revoked_at: clock.now.utc)
           end
 
           # Implements PKCE code_challenge encoding without base64 padding as described in the spec.
