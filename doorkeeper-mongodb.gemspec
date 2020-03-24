@@ -24,7 +24,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "grape"
   gem.add_development_dependency "coveralls"
   gem.add_development_dependency "sqlite3", "~> 1.3.5"
-  gem.add_development_dependency "rspec-rails", "~> 3.7"
+  gem.add_development_dependency "rspec-rails"
   gem.add_development_dependency "capybara", "~> 2.17"
   gem.add_development_dependency "generator_spec", "~> 0.9.4"
   gem.add_development_dependency "factory_bot", "~> 4.8"
