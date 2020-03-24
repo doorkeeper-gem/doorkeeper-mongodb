@@ -55,14 +55,6 @@ module DoorkeeperMongodb
           end
         end
 
-        def secret_strategy
-          ::Doorkeeper.configuration.token_secret_strategy
-        end
-
-        def fallback_secret_strategy
-          ::Doorkeeper.configuration.token_secret_fallback_strategy
-        end
-
         module ClassMethods
           # Searches for Doorkeeper::AccessGrant record with the
           # specific token value.
@@ -135,6 +127,20 @@ module DoorkeeperMongodb
 
           def pkce_supported?
             new.pkce_supported?
+          end
+
+          ##
+          # Determines the secret storing transformer
+          # Unless configured otherwise, uses the plain secret strategy
+          def secret_strategy
+            ::Doorkeeper.config.token_secret_strategy
+          end
+
+          ##
+          # Determine the fallback storing strategy
+          # Unless configured, there will be no fallback
+          def fallback_secret_strategy
+            ::Doorkeeper.config.token_secret_fallback_strategy
           end
         end
 
