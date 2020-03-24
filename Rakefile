@@ -10,6 +10,7 @@ task :load_doorkeeper do
   end
   `cp -r -n doorkeeper/spec .`
   `rm -rf spec/generators/` # we are not ActiveRecord
+  `rm -rf spec/validators/`
   `bundle exec rspec`
 end
 

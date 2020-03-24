@@ -1,6 +1,8 @@
 require 'doorkeeper-mongodb/version'
 
+require 'active_model'
 require 'doorkeeper'
+require 'doorkeeper/orm/active_record/redirect_uri_validator'
 
 require 'doorkeeper-mongodb/compatible'
 require 'doorkeeper-mongodb/shared/scopes'
