@@ -22,23 +22,20 @@ module DoorkeeperMongodb
             inverse_of: :access_tokens,
           }
 
+          # Doorkeeper 5.3 has custom classes for defining OAuth roles
           if DoorkeeperMongodb.doorkeeper_version?(5, 3)
             belongs_to_opts[:class_name] = Doorkeeper.config.application_class
           end
 
           # optional associations added in Mongoid 6
-          if ::Mongoid::VERSION[0].to_i >= 6
-            belongs_to_opts[:optional] = true
-          end
+          belongs_to_opts[:optional] = true if ::Mongoid::VERSION[0].to_i >= 6
 
           belongs_to :application, belongs_to_opts
 
           if Doorkeeper::VERSION::MINOR > 3 && Doorkeeper.config.polymorphic_resource_owner?
             opts = { polymorphic: true }
 
-            if ::Mongoid::VERSION[0].to_i >= 6
-              opts[:optional] = true
-            end
+            opts[:optional] = true if ::Mongoid::VERSION[0].to_i >= 6
 
             belongs_to :resource_owner, opts
           end

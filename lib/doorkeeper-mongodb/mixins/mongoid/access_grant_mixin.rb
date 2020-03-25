@@ -21,14 +21,13 @@ module DoorkeeperMongodb
             inverse_of: :access_grants,
           }
 
+          # Doorkeeper 5.3 has custom classes for defining OAuth roles
           if DoorkeeperMongodb.doorkeeper_version?(5, 3)
             belongs_to_opts[:class_name] = Doorkeeper.config.application_class
           end
 
           # optional associations added in Mongoid 6
-          if ::Mongoid::VERSION[0].to_i >= 6
-            belongs_to_opts[:optional] = true
-          end
+          belongs_to_opts[:optional] = true if ::Mongoid::VERSION[0].to_i >= 6
 
           belongs_to :application, belongs_to_opts
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# [NOTE] MongoMapper support was dropped
+# [NOTE] MongoMapper support was dropped, so now only Mongoid
 class User
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -8,9 +8,7 @@ class User
   field :name, type: String
   field :password, type: String
 
-  if ::Rails.version.to_i < 4 || defined?(::ProtectedAttributes)
-    attr_accessible :name, :password
-  end
+  attr_accessible :name, :password if defined?(::ProtectedAttributes)
 
   def self.authenticate!(name, password)
     User.where(name: name, password: password).first

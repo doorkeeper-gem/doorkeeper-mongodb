@@ -24,6 +24,7 @@ module Doorkeeper
       class_name: "Doorkeeper::AccessToken",
     }
 
+    # Doorkeeper 5.3 has custom classes for defining OAuth roles
     if DoorkeeperMongodb.doorkeeper_version?(5, 3)
       has_many_opts[:class_name] = Doorkeeper.config.access_token_class
     end

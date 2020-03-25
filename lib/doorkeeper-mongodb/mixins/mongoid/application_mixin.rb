@@ -14,19 +14,38 @@ module DoorkeeperMongodb
         included do
           has_many_options = {
             dependent: :delete,
+
           }
 
           # Mongoid7 dropped :delete option
-          if ::Mongoid::VERSION[0].to_i >= 7
-            has_many_options[:dependent] = :delete_all
-          end
+          has_many_options[:dependent] = :delete_all if ::Mongoid::VERSION[0].to_i >= 7
 
-          has_many :access_grants, has_many_options.merge(class_name: "Doorkeeper::AccessGrant")
-          has_many :access_tokens, has_many_options.merge(class_name: "Doorkeeper::AccessToken")
+          # Doorkeeper 5.3 has custom classes for defining OAuth roles
+          access_grants_class_name = if DoorkeeperMongodb.doorkeeper_version?(5, 3)
+                                       Doorkeeper.config.access_grant_class
+                                     else
+                                       "Doorkeeper::AccessGrant"
+                                     end
+
+          access_tokens_class_name = if DoorkeeperMongodb.doorkeeper_version?(5, 3)
+                                       Doorkeeper.config.access_token_class
+                                     else
+                                       "Doorkeeper::AccessToken"
+                                     end
+
+          has_many :access_grants, has_many_options.merge(class_name: access_grants_class_name)
+          has_many :access_tokens, has_many_options.merge(class_name: access_tokens_class_name)
 
           validates :name, :secret, :uid, presence: true
           validates :uid, uniqueness: true
-          validates :redirect_uri, "doorkeeper/redirect_uri": true
+
+          # Before Doorkeeper 5.2.3
+          if defined?(::RedirectUriValidator)
+            validates :redirect_uri, redirect_uri: true
+          else
+            validates :redirect_uri, "doorkeeper/redirect_uri": true
+          end
+
           validates :confidential, inclusion: { in: [true, false] }
 
           validate :scopes_match_configured, if: :enforce_scopes?
