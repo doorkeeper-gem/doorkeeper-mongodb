@@ -169,27 +169,70 @@ module DoorkeeperMongodb
           #
           # @return [Doorkeeper::AccessToken] existing record or a new one
           #
-          def find_or_create_for(application, resource_owner, scopes, expires_in, use_refresh_token)
+          def find_or_create_for(*args)
+            # [NOTE]: For backward compatibility with Doorkeeper < 5.4
+            attributes = if args.size > 1
+                           {
+                             application: args[0],
+                             resource_owner: args[1],
+                             scopes: args[2],
+                             expires_in: args[3],
+                             use_refresh_token: args[4],
+                           }
+                         else
+                           args.first
+                         end
+
+            application = attributes[:application]
+            resource_owner = attributes[:resource_owner]
+            scopes = attributes[:scopes]
+            expires_in = attributes[:expires_in]
+            use_refresh_token = attributes[:use_refresh_token]
+
             if Doorkeeper.configuration.reuse_access_token
               access_token = matching_token_for(application, resource_owner, scopes)
 
               return access_token if access_token&.reusable?
             end
 
-            attributes = {
-              application_id: application.try(:id),
-              scopes: scopes.to_s,
+            create_for(
+              application: application,
+              resource_owner: resource_owner,
+              scopes: scopes,
               expires_in: expires_in,
               use_refresh_token: use_refresh_token,
-            }
+            )
+          end
+
+          # Creates a not expired AccessToken record with a matching set of
+          # scopes that belongs to specific Application and Resource Owner.
+          #
+          # @param application [Doorkeeper::Application]
+          #   Application instance
+          # @param resource_owner [Mongoid::Document, Integer]
+          #   Resource Owner model instance or it's ID
+          # @param scopes [#to_s]
+          #   set of scopes (any object that responds to `#to_s`)
+          # @param token_attributes [Hash]
+          #   Additional attributes to use when creating a token
+          # @option token_attributes [Integer] :expires_in
+          #   token lifetime in seconds
+          # @option token_attributes [Boolean] :use_refresh_token
+          #   whether to use the refresh token
+          #
+          # @return [Doorkeeper::AccessToken] new access token
+          #
+          def create_for(application:, resource_owner:, scopes:, **token_attributes)
+            token_attributes[:application_id] = application&.id
+            token_attributes[:scopes] = scopes.to_s
 
             if Doorkeeper.configuration.try(:polymorphic_resource_owner?)
-              attributes[:resource_owner] = resource_owner
+              token_attributes[:resource_owner] = resource_owner
             else
-              attributes[:resource_owner_id] = resource_owner_id_for(resource_owner)
+              token_attributes[:resource_owner_id] = resource_owner_id_for(resource_owner)
             end
 
-            create!(**attributes)
+            create!(token_attributes)
           end
 
           # Looking for not revoked Access Token records that belongs to specific
