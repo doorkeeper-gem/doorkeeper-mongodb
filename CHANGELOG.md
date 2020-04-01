@@ -6,6 +6,10 @@ User-visible changes worth mentioning.
 
 - [#] Your description here
 
+## 5.2.1
+
+- [#43] Fix issue with polymorphic resource owner
+
 ## 5.2.0
 
 - [#42] Add support for Doorkeeper >= 5.2

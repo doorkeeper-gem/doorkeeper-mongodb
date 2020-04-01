@@ -19,7 +19,7 @@ module Doorkeeper
             #
             def by_resource_owner(resource_owner)
               if DoorkeeperMongodb.doorkeeper_version?(5, 3) &&
-                 Doorkeeper.configuration.polymorphic_resource_owner?
+                Doorkeeper.configuration.try(:polymorphic_resource_owner?)
                 where(resource_owner: resource_owner)
               else
                 where(resource_owner_id: resource_owner_id_for(resource_owner))

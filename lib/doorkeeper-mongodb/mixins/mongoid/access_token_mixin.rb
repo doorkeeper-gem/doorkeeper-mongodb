@@ -32,7 +32,7 @@ module DoorkeeperMongodb
 
           belongs_to :application, belongs_to_opts
 
-          if Doorkeeper::VERSION::MINOR > 3 && Doorkeeper.config.polymorphic_resource_owner?
+          if Doorkeeper.configuration.try(:polymorphic_resource_owner?)
             opts = { polymorphic: true }
 
             opts[:optional] = true if ::Mongoid::VERSION[0].to_i >= 6
@@ -183,7 +183,7 @@ module DoorkeeperMongodb
               use_refresh_token: use_refresh_token,
             }
 
-            if Doorkeeper::VERSION::MINOR > 3 && Doorkeeper.config.polymorphic_resource_owner?
+            if Doorkeeper.configuration.try(:polymorphic_resource_owner?)
               attributes[:resource_owner] = resource_owner
             else
               attributes[:resource_owner_id] = resource_owner_id_for(resource_owner)
@@ -278,7 +278,7 @@ module DoorkeeperMongodb
         # @return [Boolean] true if credentials are same of false in other cases
         #
         def same_resource_owner?(access_token)
-          if Doorkeeper::VERSION::MINOR > 3 && Doorkeeper.config.polymorphic_resource_owner?
+          if Doorkeeper.configuration.try(:polymorphic_resource_owner?)
             resource_owner == access_token.resource_owner
           else
             resource_owner_id == access_token.resource_owner_id
