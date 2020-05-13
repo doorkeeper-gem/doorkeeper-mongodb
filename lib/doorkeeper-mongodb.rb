@@ -17,6 +17,7 @@ require "doorkeeper/orm/concerns/mongoid/ownership"
 require "doorkeeper/orm/concerns/mongoid/resource_ownerable"
 
 require "doorkeeper-mongodb/mixins/mongoid/base_mixin"
+require "doorkeeper-mongodb/mixins/mongoid/json_serializable"
 require "doorkeeper-mongodb/mixins/mongoid/access_grant_mixin"
 require "doorkeeper-mongodb/mixins/mongoid/access_token_mixin"
 require "doorkeeper-mongodb/mixins/mongoid/application_mixin"

@@ -14,6 +14,7 @@ module DoorkeeperMongodb
         include Doorkeeper::Models::SecretStorable
         include Doorkeeper::Orm::Concerns::Mongoid::ResourceOwnerable
         include BaseMixin
+        include DoorkeeperMongodb::Mixins::Mongoid::JsonSerializable
 
         included do
           belongs_to_opts = {
