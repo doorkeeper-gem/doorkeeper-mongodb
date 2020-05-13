@@ -1,13 +1,13 @@
 PATH
   remote: .
   specs:
-    doorkeeper-mongodb (5.2.1)
+    doorkeeper-mongodb (5.2.2)
       doorkeeper (>= 5.2, < 6.0)
 
 PATH
   remote: doorkeeper
   specs:
-    doorkeeper (5.3.0)
+    doorkeeper (5.4.0)
       railties (>= 5)
 
 GEM
