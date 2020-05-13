@@ -71,7 +71,6 @@ module DoorkeeperMongodb
               # if application has no owner or it's owner doesn't match one from the options
               # we render only minimum set of attributes that could be exposed to a public
               only = extract_serializable_attributes(options)
-              puts options.merge(only: only).inspect
               super(options.merge(only: only))
             end
           end
@@ -81,7 +80,7 @@ module DoorkeeperMongodb
             if hash.key?("_id")
               hash["id"] = hash.delete("_id")
             elsif options && Array.wrap(options[:only].map(&:to_sym)).include?(:id)
-              hash["id"] = id
+              hash["id"] = id.to_s
             end
             hash
           end
