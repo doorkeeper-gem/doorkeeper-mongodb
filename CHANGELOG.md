@@ -4,7 +4,7 @@ User-visible changes worth mentioning.
 
 ## master
 
-- [#] Your description here
+- [#62] Revoke `old_refresh_token` if `previous_refresh_token` is present.
 
 ## 5.2.1
 
