@@ -5,7 +5,21 @@ require "active_support/lazy_load_hooks"
 module Doorkeeper
   module Orm
     module Mongoid5
+      def self.run_hooks
+        lazy_load do
+          require "doorkeeper/orm/mongoid5/access_grant"
+          require "doorkeeper/orm/mongoid5/access_token"
+          require "doorkeeper/orm/mongoid5/application"
+          require "doorkeeper/orm/mongoid5/stale_records_cleaner"
+          require "doorkeeper/orm/concerns/mongoid/ownership"
+          Doorkeeper::Application.include Doorkeeper::Orm::Concerns::Mongoid::Ownership
+        end
+        @initialized_hooks = true
+      end
+
+      # @deprecated
       def self.initialize_models!
+        return if @initialized_hooks
         lazy_load do
           require "doorkeeper/orm/mongoid5/access_grant"
           require "doorkeeper/orm/mongoid5/access_token"
@@ -14,7 +28,9 @@ module Doorkeeper
         end
       end
 
+      # @deprecated
       def self.initialize_application_owner!
+        return if @initialized_hooks
         lazy_load do
           require "doorkeeper/orm/concerns/mongoid/ownership"
 
