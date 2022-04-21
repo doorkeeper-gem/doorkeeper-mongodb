@@ -12,6 +12,7 @@ spec
 !spec/dummy/config/mongo*.yml
 !spec/support/orm/mongo*
 *.gem
+Gemfile.lock
 
 coverage
 
