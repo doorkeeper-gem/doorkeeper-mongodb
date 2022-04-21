@@ -4,8 +4,8 @@ defaults: &defaults
 
 development:
   <<: *defaults
-  database: doorkeeper-mongomapper-development
+  database: doorkeeper-mongoid-development
 
 test:
   <<: *defaults
-  database: doorkeeper-mongomapper-test-suite
+  database: doorkeeper-mongoid-test

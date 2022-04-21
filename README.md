@@ -9,9 +9,11 @@ of doorkeeper-mongodb you are using in: https://github.com/doorkeeper-gem/doorke
 
 ## Installation
 
-`doorkeeper-mongodb` provides [Doorkeeper](https://github.com/doorkeeper-gem/doorkeeper) support to [Mongoid](https://github.com/mongodb/mongoid)
-(2, 3, 4 and 5 for doorkeeper-mongodb `3.0` and 4, 5, 6 and 7 for version `4.0` and higher). To start using it, add
-to your Gemfile:
+`doorkeeper-mongodb` provides [Doorkeeper](https://github.com/doorkeeper-gem/doorkeeper) support
+for [Mongoid](https://github.com/mongodb/mongoid) versions 4, 5, 6 and 7. Earlier versions of Mongoid are supported
+on `doorkeeper-mongodb` version 3.0.
+
+To start using it, add to your Gemfile:
 
 ``` ruby
 # For Doorkeeper >= 5.2
@@ -51,13 +53,7 @@ Doorkeeper.configure do
 end
 ```
 
-## MongoMapper
-
-**NOTE**: Support of MongoMapper gem was dropped.
-
 ## Indexes
-
-### Mongoid
 
 Make sure you create indexes for doorkeeper models. You can do this either by
 running `rake db:mongoid:create_indexes` or (if you're using Mongoid 2) by
