@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-# Uncomment to use local Doorkeeper
+# Uncomment to use local Doorkeeper gem
 # gem "doorkeeper", path: "./doorkeeper"
 
 gemspec
