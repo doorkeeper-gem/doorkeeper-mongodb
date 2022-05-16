@@ -4,82 +4,76 @@ on: [push, pull_request]
 
 jobs:
   build:
-    name: >-
-      ${{ matrix.ruby }}
+    name: ${{ matrix.ruby }}
     env:
       CI: true
       TESTOPTS: -v
     runs-on: ubuntu-latest
-    continue-on-error: ${{ matrix.experimental }}
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
-        experimental: [false]
         include:
-          # mongoid4 requires activemodel ~> 4.0
-          - orm: 'mongoid4'
-            ruby: '2.2'
-            rails: '4.2'
-
-          # mongoid5 requires activemodel ~> 4.0
-          - orm: 'mongoid5'
-            ruby: '2.2'
-            rails: '4.2'
-
           # mongoid6 requires activemodel >= 5.1, < 6.0
           - orm: 'mongoid6'
             ruby: '2.5'
             rails: '5.1'
-          - orm: 'mongoid6'
-            ruby: '2.5'
-            rails: '6.0'
+            experimental: false
 
           # mongoid7 requires activemodel >= 5.1, < 8.0
           - orm: 'mongoid7'
             ruby: '2.5'
             rails: '5.1'
+            experimental: false
           - orm: 'mongoid7'
             ruby: '2.5'
             rails: '5.2'
+            experimental: false
           - orm: 'mongoid7'
             ruby: '2.6'
             rails: '6.0'
+            experimental: false
           - orm: 'mongoid7'
             ruby: '2.7'
             rails: '6.0'
+            experimental: false
           - orm: 'mongoid7'
             ruby: '3.0'
             rails: '6.1'
+            experimental: false
           - orm: 'mongoid7'
             ruby: '3.0'
             rails: '7.0'
+            experimental: false
           - orm: 'mongoid7'
             ruby: '3.1'
             rails: '7.0'
+            experimental: false
 
           # jruby
           - orm: 'mongoid7'
             ruby: 'jruby'
             rails: '6.1'
+            experimental: false
 
           # truffleruby
           - orm: 'mongoid7'
             ruby: 'truffleruby'
             rails: '6.1'
+            experimental: false
 
           # experimental
           - orm: 'mongoid7'
             ruby: 'head'
             rails: '7.0'
-            experimental: 'true'
+            experimental: true
           - orm: 'mongoid7'
             ruby: 'jruby-head'
             rails: '7.0'
-            experimental: 'true'
+            experimental: true
           - orm: 'mongoid7'
             ruby: 'truffleruby-head'
             rails: '7.0'
-            experimental: 'true'
+            experimental: true
 
     steps:
       - name: repo checkout
@@ -100,11 +94,13 @@ jobs:
       - name: bundle install
         run:  bundle install --jobs 4 --retry 3
         env:
-          BUNDLE_GEMFILE: "Gemfile.${{matrix.orm}}.rb"
+          RAILS: ${{ matrix.rails }}
+          BUNDLE_GEMFILE: 'gemfiles/Gemfile.${{matrix.orm}}.rb'
 
       - name: test
         timeout-minutes: 10
         run: bundle exec rake spec
         continue-on-error: ${{ matrix.experimental }}
         env:
-          BUNDLE_GEMFILE: "Gemfile.${{matrix.orm}}.rb"
+          RAILS: ${{ matrix.rails }}
+          BUNDLE_GEMFILE: 'gemfiles/Gemfile.${{matrix.orm}}.rb'
