@@ -2,8 +2,11 @@
 
 source "https://rubygems.org"
 
-gem "doorkeeper", path: "./doorkeeper"
+# Uncomment to use local Doorkeeper gem
+# gem "doorkeeper", path: "./doorkeeper"
+
 gemspec
+
 gem "mongoid"
 gem "rake"
 gem "rspec-core"
