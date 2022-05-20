@@ -10,27 +10,14 @@ of doorkeeper-mongodb you are using in: https://github.com/doorkeeper-gem/doorke
 ## Installation
 
 `doorkeeper-mongodb` provides [Doorkeeper](https://github.com/doorkeeper-gem/doorkeeper) support
-for [Mongoid](https://github.com/mongodb/mongoid) versions 4, 5, 6 and 7. Earlier versions of Mongoid are supported
-on `doorkeeper-mongodb` version 3.0.
+for [Mongoid](https://github.com/mongodb/mongoid) versions 6 and later. Earlier versions of Mongoid
+are supported on earlier versions of `doorkeeper-mongodb`.
 
-To start using it, add to your Gemfile:
+To start using it, add both `doorkeeper` and `doorkeeper-mongodb` to your Gemfile:
 
-``` ruby
-# For Doorkeeper >= 5.2
-gem 'doorkeeper', '~> 5.2'
-gem 'doorkeeper-mongodb', '~> 5.2'
-
-# For Doorkeeper >= 5.0
-gem 'doorkeeper', '~> 5.0'
-gem 'doorkeeper-mongodb', '~> 5.0'
-
-# For Doorkeeper >= 4.4 && < 5.0
-gem 'doorkeeper', '~> 4.4'
-gem 'doorkeeper-mongodb', '~> 4.2'
-
-# For Doorkeeper < 4.4
-gem 'doorkeeper', '~> 4.3'
-gem 'doorkeeper-mongodb', '~> 4.1.0'
+```ruby
+gem 'doorkeeper'
+gem 'doorkeeper-mongodb'
 
 # or if you want to use cutting edge version:
 # gem 'doorkeeper-mongodb', github: 'doorkeeper-gem/doorkeeper-mongodb'
@@ -38,7 +25,9 @@ gem 'doorkeeper-mongodb', '~> 4.1.0'
 
 Run [doorkeeper’s installation generator]:
 
-    rails generate doorkeeper:install
+```bash
+$ rails generate doorkeeper:install
+```
 
 [doorkeeper’s installation generator]: https://github.com/doorkeeper-gem/doorkeeper#installation
 
@@ -47,7 +36,7 @@ This will install the doorkeeper initializer into
 
 Set the ORM configuration:
 
-``` ruby
+```ruby
 Doorkeeper.configure do
   orm :mongoid7 # or any other version of mongoid
 end
@@ -67,7 +56,7 @@ variables defined in `.travis.yml` file.
 
 To run locally, you need to choose a gemfile, with a command similar to:
 
-```
+```bash
 $ export RAILS=5.1
 $ export BUNDLE_GEMFILE=$PWD/gemfiles/Gemfile.mongoid6.rb
 ```

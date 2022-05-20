@@ -21,7 +21,6 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency "doorkeeper", ">= 5.2", "< 6.0"
 
-  gem.add_development_dependency "capybara", "~> 2.17"
   gem.add_development_dependency "coveralls"
   gem.add_development_dependency "database_cleaner", "~> 1.6.0"
   gem.add_development_dependency "factory_bot", "~> 4.8"
