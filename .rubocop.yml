@@ -1,12 +1,19 @@
 inherit_from: .rubocop_todo.yml
-require: rubocop-performance
+
+require:
+  - rubocop-performance
+  - rubocop-rails
+  - rubocop-rake
+
 AllCops:
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.5
+  NewCops: enable
+  SuggestExtensions: false
   Exclude:
-    - "spec/dummy/db/*"
-    - "spec/dummy/config/*"
-    - "doorkeepper/**/*"
-    - "gemfiles/*.gemfile"
+    - vendor/**/*
+    - doorkeeper/**/*
+    - spec/dummy/db/*
+    - spec/dummy/config/*
 
 Metrics/BlockLength:
   Exclude:
@@ -17,38 +24,56 @@ Metrics/MethodLength:
   Exclude:
     - spec/dummy/db/**/*
 
+Naming/FileName:
+  Exclude:
+    - lib/doorkeeper-mongodb.rb
+    - gemfiles/Gemfile.*
+
+Rails/RakeEnvironment:
+  Enabled: false
+
 Style/StringLiterals:
   EnforcedStyle: double_quotes
+
 Style/StringLiteralsInInterpolation:
   EnforcedStyle: double_quotes
+
 Style/FrozenStringLiteralComment:
   Enabled: true
 
-Style/TrailingCommaInHashLiteral:
-  EnforcedStyleForMultiline: consistent_comma
-Style/TrailingCommaInArrayLiteral:
-  EnforcedStyleForMultiline: consistent_comma
-Style/TrailingCommaInArguments:
-  EnforcedStyleForMultiline: consistent_comma
-
-Style/SymbolArray:
-  MinSize: 3
 Style/WordArray:
   MinSize: 3
 
 Style/ClassAndModuleChildren:
   Enabled: false
-Style/NumericPredicate:
-  Enabled: false
+
 Style/DoubleNegation:
   Enabled: false
 
+Style/NumericPredicate:
+  Enabled: false
+
+Style/SymbolArray:
+  MinSize: 3
+
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: consistent_comma
+
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: consistent_comma
+
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: consistent_comma
+
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
+
 Layout/TrailingEmptyLines:
   Enabled: true
+
 Layout/DotPosition:
   EnforcedStyle: leading
+
 Layout/LineLength:
   Exclude:
     - spec/**/*

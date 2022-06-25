@@ -20,6 +20,7 @@ module Doorkeeper
       # @deprecated
       def self.initialize_models!
         return if @initialized_hooks
+
         lazy_load do
           require "doorkeeper/orm/mongoid4/access_grant"
           require "doorkeeper/orm/mongoid4/access_token"
@@ -31,6 +32,7 @@ module Doorkeeper
       # @deprecated
       def self.initialize_application_owner!
         return if @initialized_hooks
+
         lazy_load do
           require "doorkeeper/orm/concerns/mongoid/ownership"
 
