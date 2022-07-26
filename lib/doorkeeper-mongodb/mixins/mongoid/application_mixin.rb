@@ -36,8 +36,8 @@ module DoorkeeperMongodb
           has_many :access_grants, has_many_options.merge(class_name: access_grants_class_name)
           has_many :access_tokens, has_many_options.merge(class_name: access_tokens_class_name)
 
-          validates :name, :secret, :uid, presence: true
-          validates :uid, uniqueness: true
+          validates_presence_of :name, :secret, :uid
+          validates_uniqueness_of :uid
 
           # Before Doorkeeper 5.2.3
           if defined?(::RedirectUriValidator)
@@ -46,7 +46,7 @@ module DoorkeeperMongodb
             validates :redirect_uri, "doorkeeper/redirect_uri": true
           end
 
-          validates :confidential, inclusion: { in: [true, false] }
+          validates_inclusion_of :confidential, in: [true, false]
 
           validate :scopes_match_configured, if: :enforce_scopes?
 
@@ -242,7 +242,7 @@ module DoorkeeperMongodb
         end
 
         def generate_secret
-          return unless secret.blank?
+          return if secret.present?
 
           @raw_secret = UniqueToken.generate
           secret_strategy.store_secret(self, :secret, @raw_secret)
@@ -250,7 +250,8 @@ module DoorkeeperMongodb
 
         def scopes_match_configured
           if scopes.present? &&
-             !ScopeChecker.valid?(scope_str: scopes.to_s, server_scopes: Doorkeeper.configuration.scopes)
+             !ScopeChecker.valid?(scope_str: scopes.to_s,
+                                  server_scopes: Doorkeeper.configuration.scopes,)
             errors.add(:scopes, :not_match_configured)
           end
         end

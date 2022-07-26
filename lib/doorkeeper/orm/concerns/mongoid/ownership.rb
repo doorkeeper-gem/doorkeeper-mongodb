@@ -13,7 +13,7 @@ module Doorkeeper
             belongs_to_options[:optional] = true if ::Mongoid::VERSION[0].to_i >= 6
 
             belongs_to :owner, belongs_to_options
-            validates :owner, presence: true, if: :validate_owner?
+            validates_presence_of :owner, if: :validate_owner?
           end
 
           def validate_owner?

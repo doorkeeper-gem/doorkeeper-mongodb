@@ -36,8 +36,9 @@ module DoorkeeperMongodb
             belongs_to :resource_owner, polymorphic: true
           end
 
-          validates :resource_owner_id, :application_id, :token, :expires_in, :redirect_uri, presence: true
-          validates :token, uniqueness: true
+          validates_presence_of :resource_owner_id, :application_id, :token,
+                                :expires_in, :redirect_uri
+          validates_uniqueness_of :token
 
           before_validation :generate_token, on: :create
         end
@@ -123,15 +124,14 @@ module DoorkeeperMongodb
 
           # @param code_verifier [#to_s] a one time use value (any object that responds to `#to_s`)
           #
-          # @return [#to_s] An encoded code challenge based on the provided verifier suitable for PKCE validation
+          # @return [#to_s] An encoded code challenge based on the provided verifier suitable
+          #   for PKCE validation
           def generate_code_challenge(code_verifier)
             padded_result = Base64.urlsafe_encode64(Digest::SHA256.digest(code_verifier))
             padded_result.split("=")[0] # Remove any trailing '='
           end
 
-          def pkce_supported?
-            new.pkce_supported?
-          end
+          delegate :pkce_supported?, to: :new
 
           ##
           # Determines the secret storing transformer

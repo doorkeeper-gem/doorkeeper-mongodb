@@ -41,8 +41,9 @@ module DoorkeeperMongodb
             belongs_to :resource_owner, opts
           end
 
-          validates :token, presence: true, uniqueness: true
-          validates :refresh_token, uniqueness: true, if: :use_refresh_token?
+          validates_presence_of :token
+          validates_uniqueness_of :token
+          validates_uniqueness_of :refresh_token, if: :use_refresh_token?
 
           # @attr_writer [Boolean, nil] use_refresh_token
           #   indicates the possibility of using refresh token
@@ -419,7 +420,8 @@ module DoorkeeperMongodb
 
           return generator if generator.respond_to?(:generate)
 
-          raise Doorkeeper::Errors::UnableToGenerateToken, "#{generator} does not respond to `.generate`."
+          raise Doorkeeper::Errors::UnableToGenerateToken,
+                "#{generator} does not respond to `.generate`."
         rescue NameError
           raise Doorkeeper::Errors::TokenGeneratorNotFound, "#{generator_name} not found"
         end
