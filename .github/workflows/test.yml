@@ -49,14 +49,55 @@ jobs:
             rails: '7.0'
             experimental: false
 
+          # mongoid8 requires activemodel >= 5.1, < 8.0
+          - orm: 'mongoid8'
+            ruby: '2.5'
+            rails: '5.1'
+            experimental: false
+          - orm: 'mongoid8'
+            ruby: '2.5'
+            rails: '5.2'
+            experimental: false
+          - orm: 'mongoid8'
+            ruby: '2.6'
+            rails: '6.0'
+            experimental: false
+          - orm: 'mongoid8'
+            ruby: '2.7'
+            rails: '6.0'
+            experimental: false
+          - orm: 'mongoid8'
+            ruby: '3.0'
+            rails: '6.1'
+            experimental: false
+          - orm: 'mongoid8'
+            ruby: '3.0'
+            rails: '7.0'
+            experimental: false
+          - orm: 'mongoid8'
+            ruby: '3.1'
+            rails: '7.0'
+            experimental: false
+
           # jruby
           - orm: 'mongoid7'
             ruby: 'jruby'
             rails: '6.1'
             experimental: false
 
+          - orm: 'mongoid8'
+            ruby: 'jruby'
+            rails: '6.1'
+            experimental: false
+
           # truffleruby
           - orm: 'mongoid7'
+            ruby: 'truffleruby'
+            rails: '6.1'
+            experimental: false
+
+          # truffleruby
+          - orm: 'mongoid8'
             ruby: 'truffleruby'
             rails: '6.1'
             experimental: false
@@ -71,6 +112,20 @@ jobs:
             rails: '7.0'
             experimental: true
           - orm: 'mongoid7'
+            ruby: 'truffleruby-head'
+            rails: '7.0'
+            experimental: true
+
+          # experimental
+          - orm: 'mongoid8'
+            ruby: 'head'
+            rails: '7.0'
+            experimental: true
+          - orm: 'mongoid8'
+            ruby: 'jruby-head'
+            rails: '7.0'
+            experimental: true
+          - orm: 'mongoid8'
             ruby: 'truffleruby-head'
             rails: '7.0'
             experimental: true
