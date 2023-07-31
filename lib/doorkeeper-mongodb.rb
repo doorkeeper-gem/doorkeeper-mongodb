@@ -28,6 +28,7 @@ require "doorkeeper/orm/mongoid4"
 require "doorkeeper/orm/mongoid5"
 require "doorkeeper/orm/mongoid6"
 require "doorkeeper/orm/mongoid7"
+require "doorkeeper/orm/mongoid8"
 
 module DoorkeeperMongodb
   def load_locales
