@@ -13,21 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # mongoid6 requires activemodel >= 5.1, < 6.0
-          - orm: 'mongoid6'
-            ruby: '2.5'
-            rails: '5.1'
-            experimental: false
-
           # mongoid7 requires activemodel >= 5.1, < 8.0
-          - orm: 'mongoid7'
-            ruby: '2.5'
-            rails: '5.1'
-            experimental: false
-          - orm: 'mongoid7'
-            ruby: '2.5'
-            rails: '5.2'
-            experimental: false
           - orm: 'mongoid7'
             ruby: '2.6'
             rails: '6.0'
@@ -50,14 +36,6 @@ jobs:
             experimental: false
 
           # mongoid8 requires activemodel >= 5.1, < 8.0
-          - orm: 'mongoid8'
-            ruby: '2.5'
-            rails: '5.1'
-            experimental: false
-          - orm: 'mongoid8'
-            ruby: '2.5'
-            rails: '5.2'
-            experimental: false
           - orm: 'mongoid8'
             ruby: '2.6'
             rails: '6.0'
