@@ -57,8 +57,8 @@ variables defined in `.travis.yml` file.
 To run locally, you need to choose a gemfile, with a command similar to:
 
 ```bash
-$ export RAILS=5.1
-$ export BUNDLE_GEMFILE=$PWD/gemfiles/Gemfile.mongoid6.rb
+$ export RAILS=6.0
+$ export BUNDLE_GEMFILE=$PWD/gemfiles/Gemfile.mongoid7.rb
 ```
 
 ---

@@ -77,4 +77,4 @@ Layout/DotPosition:
 Layout/LineLength:
   Exclude:
     - spec/**/*
-  Max: 100
+  Max: 120
