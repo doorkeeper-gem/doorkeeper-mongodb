@@ -2,8 +2,17 @@
 
 User-visible changes worth mentioning.
 
-## master
+## main
 
+- [#87] Fix `matching_token_for`, enable to reuse_access_token.
+
+## 5.3.0
+
+- [#84] Add Mongoid8
+
+## 5.2.2
+
+- Fixes CVE-2020-10187
 - [#62] Revoke `old_refresh_token` if `previous_refresh_token` is present.
 
 ## 5.2.1
