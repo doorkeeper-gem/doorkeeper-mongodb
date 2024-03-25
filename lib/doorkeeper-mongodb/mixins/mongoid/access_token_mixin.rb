@@ -113,8 +113,9 @@ module DoorkeeperMongodb
           # @return [Doorkeeper::AccessToken, nil] Access Token instance or
           #   nil if matching record was not found
           #
-          def matching_token_for(application, resource_owner, scopes)
+          def matching_token_for(application, resource_owner, scopes, include_expired: true)
             tokens = authorized_tokens_for(application&.id, resource_owner)
+            tokens = tokens.not_expired unless include_expired
             find_matching_token(tokens, application, scopes)
           end
 
@@ -424,6 +425,26 @@ module DoorkeeperMongodb
                 "#{generator} does not respond to `.generate`."
         rescue NameError
           raise Doorkeeper::Errors::TokenGeneratorNotFound, "#{generator_name} not found"
+        end
+
+        # Returns non-expired and non-revoked access tokens
+        def not_expired
+          relation = where(revoked_at: nil)
+
+          relation.where(
+            {
+              "$expr": {
+                "$gt": [
+                  {
+                    "$add": ["$created_at", { "$multiply": ["$expires_in", 1000] }],
+                  },
+                  Time.now.utc,
+                ],
+              },
+            },
+          ).or(
+            relation.where(expires_in: nil),
+          )
         end
       end
     end
