@@ -15,10 +15,6 @@ jobs:
         include:
           # mongoid7 requires activemodel >= 5.1, < 8.0
           - orm: 'mongoid7'
-            ruby: '2.6'
-            rails: '6.0'
-            experimental: false
-          - orm: 'mongoid7'
             ruby: '2.7'
             rails: '6.0'
             experimental: false
@@ -37,10 +33,6 @@ jobs:
 
           # mongoid8 requires activemodel >= 5.1, < 8.0
           - orm: 'mongoid8'
-            ruby: '2.6'
-            rails: '6.0'
-            experimental: false
-          - orm: 'mongoid8'
             ruby: '2.7'
             rails: '6.0'
             experimental: false
@@ -55,29 +47,6 @@ jobs:
           - orm: 'mongoid8'
             ruby: '3.1'
             rails: '7.0'
-            experimental: false
-
-          # jruby
-          - orm: 'mongoid7'
-            ruby: 'jruby'
-            rails: '6.1'
-            experimental: false
-
-          - orm: 'mongoid8'
-            ruby: 'jruby'
-            rails: '6.1'
-            experimental: false
-
-          # truffleruby
-          - orm: 'mongoid7'
-            ruby: 'truffleruby'
-            rails: '6.1'
-            experimental: false
-
-          # truffleruby
-          - orm: 'mongoid8'
-            ruby: 'truffleruby'
-            rails: '6.1'
             experimental: false
 
           # experimental

@@ -53,6 +53,26 @@ module DoorkeeperMongodb
           before_validation :generate_refresh_token,
                             on: :create,
                             if: :use_refresh_token?
+
+          # Returns non-expired and non-revoked access tokens
+          scope :not_expired, -> {
+            relation = where(revoked_at: nil)
+
+            relation.where(
+              {
+                "$expr": {
+                  "$gt": [
+                    {
+                      "$add": ["$created_at", { "$multiply": ["$expires_in", 1000] }],
+                    },
+                    Time.now.utc,
+                  ],
+                },
+              },
+            ).or(
+              relation.where(expires_in: nil),
+            )
+          }
         end
 
         module ClassMethods
@@ -192,6 +212,10 @@ module DoorkeeperMongodb
             expires_in = attributes[:expires_in]
             use_refresh_token = attributes[:use_refresh_token]
 
+            token_attributes = attributes.except(
+              :application, :resource_owner, :scopes, :expires_in, :use_refresh_token
+            )
+
             if Doorkeeper.configuration.reuse_access_token
               access_token = matching_token_for(application, resource_owner, scopes)
 
@@ -204,6 +228,7 @@ module DoorkeeperMongodb
               scopes: scopes,
               expires_in: expires_in,
               use_refresh_token: use_refresh_token,
+              **token_attributes,
             )
           end
 
@@ -404,15 +429,29 @@ module DoorkeeperMongodb
         def generate_token
           self.created_at ||= Time.now.utc
 
-          @raw_token = token_generator.generate(
+          @raw_token = token_generator.generate(attributes_for_token_generator)
+          secret_strategy.store_secret(self, :token, @raw_token)
+          @raw_token
+        end
+
+        def attributes_for_token_generator
+          {
             resource_owner_id: resource_owner_id,
             scopes: scopes,
             application: application,
             expires_in: expires_in,
             created_at: created_at,
-          )
-          secret_strategy.store_secret(self, :token, @raw_token)
-          @raw_token
+          }.tap do |attributes|
+            if Doorkeeper.config.try(:polymorphic_resource_owner?)
+              attributes[:resource_owner] = resource_owner
+            end
+
+            if Doorkeeper.config.respond_to?(:custom_access_token_attributes)
+              Doorkeeper.config.custom_access_token_attributes.each do |attribute_name|
+                attributes[attribute_name] = public_send(attribute_name)
+              end
+            end
+          end
         end
 
         def token_generator
@@ -425,26 +464,6 @@ module DoorkeeperMongodb
                 "#{generator} does not respond to `.generate`."
         rescue NameError
           raise Doorkeeper::Errors::TokenGeneratorNotFound, "#{generator_name} not found"
-        end
-
-        # Returns non-expired and non-revoked access tokens
-        def not_expired
-          relation = where(revoked_at: nil)
-
-          relation.where(
-            {
-              "$expr": {
-                "$gt": [
-                  {
-                    "$add": ["$created_at", { "$multiply": ["$expires_in", 1000] }],
-                  },
-                  Time.now.utc,
-                ],
-              },
-            },
-          ).or(
-            relation.where(expires_in: nil),
-          )
         end
       end
     end
