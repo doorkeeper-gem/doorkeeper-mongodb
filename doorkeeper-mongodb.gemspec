@@ -13,7 +13,7 @@ Gem::Specification.new do |gem|
   gem.email       = ["bulaj.nikita@gmail.com"]
   gem.homepage    = "http://github.com/doorkeeper-gem/doorkeeper-mongodb"
   gem.summary     = "Doorkeeper Mongoid ORM extension"
-  gem.description = "Doorkeeper Mongoid ORM  extension"
+  gem.description = "Doorkeeper Mongoid ORM extension"
   gem.license     = "MIT"
 
   gem.files      = Dir["lib/**/*", "config/**/*", "MIT-LICENSE", "Rakefile", "README.md"]

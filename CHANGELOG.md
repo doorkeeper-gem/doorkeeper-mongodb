@@ -4,6 +4,10 @@ User-visible changes worth mentioning.
 
 ## main
 
+- Add your contribution here.
+
+## 5.4.0
+
 - [#89] Support custom attributes for Access Grant / Access Token.
 - [#89] Upgrade Doorkeeper version, fix issues.
 - [#87] Fix `matching_token_for`, enable to reuse_access_token.
