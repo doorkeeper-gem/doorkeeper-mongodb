@@ -6,6 +6,11 @@ User-visible changes worth mentioning.
 
 - Add your contribution here.
 
+## 5.5.0
+
+- [#90] Add required inverse_of option on Doorkeeper::Application
+- [#91] Add Mongoid 9 support
+
 ## 5.4.0
 
 - [#89] Support custom attributes for Access Grant / Access Token.
