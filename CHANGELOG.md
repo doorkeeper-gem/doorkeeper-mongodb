@@ -6,6 +6,11 @@ User-visible changes worth mentioning.
 
 - Add your contribution here.
 
+## 5.5.1
+
+- [#96] Fix: non-confidential apps should not generate a client secret
+- [#95] Add no-op with_primary_role for Doorkeeper 5.9 compatibility
+
 ## 5.5.0
 
 - [#90] Add required inverse_of option on Doorkeeper::Application
