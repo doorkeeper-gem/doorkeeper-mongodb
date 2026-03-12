@@ -14,7 +14,7 @@ gem "rake"
 gem "rspec-core"
 gem "rspec-expectations"
 gem "rspec-mocks"
-gem "rspec-rails", "~> 6.0.0"
+gem "rspec-rails"
 gem "rspec-support"
 gem "rubocop", "~> 1.29.1"
 gem "rubocop-performance", require: false

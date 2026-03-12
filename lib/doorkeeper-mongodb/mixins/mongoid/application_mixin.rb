@@ -36,7 +36,8 @@ module DoorkeeperMongodb
           has_many :access_grants, has_many_options.merge(class_name: access_grants_class_name)
           has_many :access_tokens, has_many_options.merge(class_name: access_tokens_class_name)
 
-          validates_presence_of :name, :secret, :uid
+          validates_presence_of :name, :uid
+          validates_presence_of :secret, if: :secret_required?
           validates_uniqueness_of :uid
 
           # Before Doorkeeper 5.2.3
@@ -243,9 +244,14 @@ module DoorkeeperMongodb
 
         def generate_secret
           return if secret.present?
+          return unless secret_required?
 
           @raw_secret = UniqueToken.generate
           secret_strategy.store_secret(self, :secret, @raw_secret)
+        end
+
+        def secret_required?
+          confidential?
         end
 
         def scopes_match_configured
