@@ -213,7 +213,7 @@ module DoorkeeperMongodb
             use_refresh_token = attributes[:use_refresh_token]
 
             token_attributes = attributes.except(
-              :application, :resource_owner, :scopes, :expires_in, :use_refresh_token
+              :application, :resource_owner, :scopes, :expires_in, :use_refresh_token,
             )
 
             if Doorkeeper.configuration.reuse_access_token

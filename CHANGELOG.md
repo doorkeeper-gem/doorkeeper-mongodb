@@ -5,6 +5,8 @@ User-visible changes worth mentioning.
 ## main
 
 - Add your contribution here.
+- Modernize CI: test against Ruby 3.2–3.4, Rails 7.1–8.0, Mongoid 8–9 and MongoDB 7.0;
+  skip upstream ActiveRecord-only examples when running the suite with Mongoid.
 
 ## 5.5.1
 

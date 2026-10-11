@@ -2,129 +2,75 @@ name: CI RSpec Test
 
 on: [push, pull_request]
 
+permissions:
+  contents: read
+
 jobs:
   build:
-    name: ${{ matrix.ruby }}
+    name: Ruby ${{ matrix.ruby }} / Rails ${{ matrix.rails }} / ${{ matrix.orm }}
+    runs-on: ubuntu-latest
     env:
       CI: true
       TESTOPTS: -v
-    runs-on: ubuntu-latest
+      RAILS: ${{ matrix.rails }}
+      BUNDLE_GEMFILE: gemfiles/Gemfile.${{ matrix.orm }}.rb
     strategy:
       fail-fast: false
       matrix:
-        include:
-          # mongoid7 requires activemodel >= 5.1, < 8.0
-          - orm: 'mongoid7'
-            ruby: '2.7'
-            rails: '6.0'
-            experimental: false
-          - orm: 'mongoid7'
-            ruby: '3.0'
-            rails: '6.1'
-            experimental: false
-          - orm: 'mongoid7'
-            ruby: '3.0'
-            rails: '7.0'
-            experimental: false
-          - orm: 'mongoid7'
-            ruby: '3.1'
-            rails: '7.0'
-            experimental: false
-
-          # mongoid8 requires activemodel >= 5.1, < 8.0
-          - orm: 'mongoid8'
-            ruby: '2.7'
-            rails: '6.0'
-            experimental: false
-          - orm: 'mongoid8'
-            ruby: '3.0'
-            rails: '6.1'
-            experimental: false
-          - orm: 'mongoid8'
-            ruby: '3.0'
-            rails: '7.0'
-            experimental: false
-          - orm: 'mongoid8'
-            ruby: '3.1'
-            rails: '7.0'
-            experimental: false
-
-          # experimental
-          - orm: 'mongoid7'
-            ruby: 'head'
-            rails: '7.0'
-            experimental: true
-          - orm: 'mongoid7'
-            ruby: 'jruby-head'
-            rails: '7.0'
-            experimental: true
-          - orm: 'mongoid7'
-            ruby: 'truffleruby-head'
-            rails: '7.0'
-            experimental: true
-
-          # experimental
-          - orm: 'mongoid8'
-            ruby: 'head'
-            rails: '7.0'
-            experimental: true
-          - orm: 'mongoid8'
-            ruby: 'jruby-head'
-            rails: '7.0'
-            experimental: true
-          - orm: 'mongoid8'
-            ruby: 'truffleruby-head'
-            rails: '7.0'
-            experimental: true
-
-          # mongoid9 supports activemodel >= 5.1, < 8.0
-          - orm: 'mongoid9'
-            ruby: '2.7'
-            rails: '6.0'
-            experimental: false
-          - orm: 'mongoid9'
-            ruby: '3.0'
-            rails: '6.1'
-            experimental: false
-          - orm: 'mongoid9'
-            ruby: '3.0'
-            rails: '7.0'
-            experimental: false
-          - orm: 'mongoid9'
-            ruby: '3.1'
-            rails: '7.0'
-            experimental: false
-          - orm: 'mongoid9'
-            ruby: '3.1'
-            rails: '7.1'
-            experimental: false
+        orm: ['mongoid8', 'mongoid9']
+        ruby: ['3.2', '3.3', '3.4']
+        rails: ['7.1', '7.2', '8.0']
 
     steps:
-      - name: repo checkout
-        uses: actions/checkout@v2
+      - name: Repo checkout
+        uses: actions/checkout@v4
 
-      - name: start mongodb
-        uses: supercharge/mongodb-github-action@1.6.0
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.12.0
         with:
-          mongodb-version: 4.4
-          mongodb-replica-set: rs0
+          mongodb-version: '7.0'
 
-      - name: load ruby
+      - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-          bundler: 2
+          bundler-cache: true
 
-      - name: bundle install
-        run:  bundle install --jobs 4 --retry 3
-        env:
-          RAILS: ${{ matrix.rails }}
-          BUNDLE_GEMFILE: 'gemfiles/Gemfile.${{matrix.orm}}.rb'
-
-      - name: test
+      - name: Run tests
         timeout-minutes: 10
         run: bundle exec rake spec
-        continue-on-error: ${{ matrix.experimental }}
-        env:
-          RAILS: ${{ matrix.rails }}
-          BUNDLE_GEMFILE: 'gemfiles/Gemfile.${{matrix.orm}}.rb'
+
+  edge:
+    name: Ruby ${{ matrix.ruby }} / Rails ${{ matrix.rails }} / ${{ matrix.orm }} (experimental)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    env:
+      CI: true
+      TESTOPTS: -v
+      RAILS: ${{ matrix.rails }}
+      BUNDLE_GEMFILE: gemfiles/Gemfile.${{ matrix.orm }}.rb
+    strategy:
+      fail-fast: false
+      matrix:
+        orm: ['mongoid9']
+        ruby: ['head', 'jruby-head', 'truffleruby-head']
+        rails: ['8.0']
+
+    steps:
+      - name: Repo checkout
+        uses: actions/checkout@v4
+
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.12.0
+        with:
+          mongodb-version: '7.0'
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+
+      - name: Run tests
+        timeout-minutes: 10
+        run: bundle exec rake spec || echo "Experimental build is done."

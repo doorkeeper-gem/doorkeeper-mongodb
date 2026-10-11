@@ -1,22 +1,24 @@
----
 name: Rubocop
 
 on: [push, pull_request]
+
+permissions:
+  contents: read
 
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
       CI: true
-      TESTOPTS: "-v"
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Ruby 3.0
+      - name: Repo checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.0
+          ruby-version: '3.3'
           bundler-cache: true
-      - name: bundle install
-        run: bundle install --jobs 4 --retry 3
+
       - name: Run RuboCop
         run: bundle exec rubocop --parallel
