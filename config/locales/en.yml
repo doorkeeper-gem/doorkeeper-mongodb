@@ -1,11 +1,4 @@
 en:
-  activerecord:
-    errors:
-      models:
-        doorkeeper/application:
-          attributes:
-            redirect_uri:
-              unspecified_scheme: 'must specify a scheme.'
   orm: &orm
     attributes:
       doorkeeper/application:
@@ -23,7 +16,7 @@ en:
               forbidden_uri: 'is forbidden by the server.'
               unspecified_scheme: 'must specify a scheme.'
             scopes:
-              not_match_configured: "doesn't match configured on the server."
+              not_match_configured: "doesn't match those configured on the server."
 
   mongoid:
     <<: *orm
