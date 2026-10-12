@@ -5,6 +5,7 @@ User-visible changes worth mentioning.
 ## main
 
 - [#68] Fix: `as_json` returned `id` as a `BSON::ObjectId` (serialized as `{"$oid" => ...}` with bson 4.x) for application owners and access grants instead of a String.
+- [#103] Fix: `StaleRecordsCleaner#clean_expired` deleted tokens and grants that had not expired yet (never-expiring `expires_in: nil` records and records with a lifetime longer than the global TTL). It now checks each record's own `created_at + expires_in` and accepts a `nil` TTL.
 - Add your contribution here.
 - Modernize CI: test against Ruby 3.2–3.4, Rails 7.1–8.0, Mongoid 8–9 and MongoDB 7.0;
   skip upstream ActiveRecord-only examples when running the suite with Mongoid.
