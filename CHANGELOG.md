@@ -4,10 +4,10 @@ User-visible changes worth mentioning.
 
 ## main
 
-- [#68] Fix: `as_json` returned `id` as a `BSON::ObjectId` (serialized as `{"$oid" => ...}` with bson 4.x) for application owners and access grants instead of a String.
+- [#101] Fix: `as_json` returned `id` as a `BSON::ObjectId` (serialized as `{"$oid" => ...}` with bson 4.x) for application owners and access grants instead of a String.
+- [#102] Fix: support custom access token attributes in the Mongoid `AccessToken` (`extract_custom_attributes`, `#custom_attributes`, `custom_attributes:` keyword on `matching_token_for` / `find_matching_token`). Fixes `NoMethodError` on `client_credentials` with `reuse_access_token` / `revoke_previous_client_credentials_token` on Doorkeeper >= 5.7, and token reuse ignoring custom attributes.
+- Modernize CI: test against Ruby 3.2–3.4, Rails 7.1–8.0, Mongoid 8–9 and MongoDB 7.0; skip upstream ActiveRecord-only examples when running the suite with Mongoid.
 - Add your contribution here.
-- Modernize CI: test against Ruby 3.2–3.4, Rails 7.1–8.0, Mongoid 8–9 and MongoDB 7.0;
-  skip upstream ActiveRecord-only examples when running the suite with Mongoid.
 
 ## 5.5.1
 

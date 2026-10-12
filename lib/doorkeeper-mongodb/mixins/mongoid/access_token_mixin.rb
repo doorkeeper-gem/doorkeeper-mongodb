@@ -129,24 +129,103 @@ module DoorkeeperMongodb
           #   Resource Owner model instance or it's ID
           # @param scopes [String, Doorkeeper::OAuth::Scopes]
           #   set of scopes
+          # @param custom_attributes [Nilable Hash]
+          #   A nil value, or hash with keys corresponding to the custom attributes
+          #   configured with the `custom_access_token_attributes` config option.
+          #   A nil value will ignore custom attributes, while an empty hash will
+          #   only match tokens that have no custom attributes set.
           #
           # @return [Doorkeeper::AccessToken, nil] Access Token instance or
           #   nil if matching record was not found
           #
-          def matching_token_for(application, resource_owner, scopes, include_expired: true)
+          def matching_token_for(application, resource_owner, scopes, custom_attributes: nil, include_expired: true)
             tokens = authorized_tokens_for(application&.id, resource_owner)
             tokens = tokens.not_expired unless include_expired
-            find_matching_token(tokens, application, scopes)
+            find_matching_token(tokens, application, custom_attributes, scopes)
           end
 
           def find_access_token_in_batches(relation, *_args, &block)
             relation.all.each(&block)
           end
 
-          def find_matching_token(relation, application, scopes)
-            relation.detect do |token|
-              scopes_match?(token.scopes, scopes, application.try(:scopes))
+          # Finds the latest token in the relation whose scopes (and custom
+          # attributes, when given) match.
+          #
+          # Doorkeeper >= 5.7 calls this method with
+          # `(relation, application, custom_attributes, scopes)`. The previous
+          # `(relation, application, scopes)` form is still accepted.
+          #
+          # @param relation [Mongoid::Criteria]
+          #   Access tokens relation
+          # @param application [Doorkeeper::Application]
+          #   Application instance
+          # @param custom_attributes [Nilable Hash]
+          #   A nil value, or hash with keys corresponding to the custom attributes
+          #   configured with the `custom_access_token_attributes` config option.
+          #   A nil value will ignore custom attributes, while an empty hash will
+          #   only match tokens that have no custom attributes set.
+          # @param scopes [String, Doorkeeper::OAuth::Scopes]
+          #   set of scopes
+          #
+          # @return [Doorkeeper::AccessToken, nil] Access Token instance or
+          #   nil if matching record was not found
+          #
+          def find_matching_token(relation, application, custom_attributes, scopes = nil)
+            if scopes.nil?
+              scopes = custom_attributes
+              custom_attributes = nil
             end
+
+            relation.detect do |token|
+              scopes_match?(token.scopes, scopes, application.try(:scopes)) &&
+                custom_attributes_match?(token, custom_attributes)
+            end
+          end
+
+          # Checks whether the token custom attribute values match the custom
+          # attributes from the parameters.
+          #
+          # @param token [Doorkeeper::AccessToken]
+          #   The access token whose custom attributes are being compared
+          #   to the custom_attributes.
+          # @param custom_attributes [Nilable Hash]
+          #   A hash of the attributes for which we want to determine whether
+          #   the token custom attributes match.
+          #
+          # @return [Boolean] true if custom_attributes is nil, if the token
+          #   custom attribute values match those in the custom_attributes, or
+          #   if both are empty/blank. False otherwise.
+          #
+          def custom_attributes_match?(token, custom_attributes)
+            return true if custom_attributes.nil?
+
+            token_attribs = token.custom_attributes
+            return true if token_attribs.blank? && custom_attributes.blank?
+
+            custom_access_token_attributes.all? do |attribute|
+              token_attribs[attribute] == custom_attributes[attribute]
+            end
+          end
+
+          # Extracts the custom attributes (defined by the
+          # `custom_access_token_attributes` config option) from the attributes.
+          #
+          # @param attributes [Hash]
+          #   A hash of the access token attributes.
+          #
+          # @return [Hash] a hash containing only the custom access token attributes.
+          #
+          def extract_custom_attributes(attributes)
+            attributes.to_h.with_indifferent_access.slice(*custom_access_token_attributes)
+          end
+
+          # Names of the custom access token attributes. The config option was
+          # added in Doorkeeper 5.6.6, the gemspec still allows older versions.
+          #
+          # @return [Array<Symbol>]
+          #
+          def custom_access_token_attributes
+            Doorkeeper.configuration.try(:custom_access_token_attributes) || []
           end
 
           # Checks whether the token scopes match the scopes from the parameters or
@@ -193,18 +272,7 @@ module DoorkeeperMongodb
           # @return [Doorkeeper::AccessToken] existing record or a new one
           #
           def find_or_create_for(*args)
-            # [NOTE]: For backward compatibility with Doorkeeper < 5.4
-            attributes = if args.size > 1
-                           {
-                             application: args[0],
-                             resource_owner: args[1],
-                             scopes: args[2],
-                             expires_in: args[3],
-                             use_refresh_token: args[4],
-                           }
-                         else
-                           args.first
-                         end
+            attributes = find_or_create_for_attributes(args)
 
             application = attributes[:application]
             resource_owner = attributes[:resource_owner]
@@ -217,7 +285,14 @@ module DoorkeeperMongodb
             )
 
             if Doorkeeper.configuration.reuse_access_token
-              access_token = matching_token_for(application, resource_owner, scopes)
+              # An empty hash must stay distinct from nil here: nil ignores custom
+              # attributes when matching, while an empty hash only matches tokens
+              # that have no custom attributes set.
+              custom_attributes = extract_custom_attributes(token_attributes)
+              access_token = matching_token_for(
+                application, resource_owner, scopes,
+                custom_attributes: custom_attributes, include_expired: false,
+              )
 
               return access_token if access_token&.reusable?
             end
@@ -301,6 +376,22 @@ module DoorkeeperMongodb
           def fallback_secret_strategy
             ::Doorkeeper.configuration.token_secret_fallback_strategy
           end
+
+          private
+
+          # Doorkeeper < 5.4 called `find_or_create_for` with positional
+          # arguments; newer versions pass a single attributes hash.
+          def find_or_create_for_attributes(args)
+            return args.first if args.size <= 1
+
+            {
+              application: args[0],
+              resource_owner: args[1],
+              scopes: args[2],
+              expires_in: args[3],
+              use_refresh_token: args[4],
+            }
+          end
         end
 
         # Access Token type: Bearer.
@@ -365,6 +456,15 @@ module DoorkeeperMongodb
         #
         def acceptable?(scopes)
           accessible? && includes_scope?(*scopes)
+        end
+
+        # The token custom attributes, as defined by the
+        # `custom_access_token_attributes` config option.
+        #
+        # @return [Hash] hash of custom access token attributes.
+        #
+        def custom_attributes
+          self.class.extract_custom_attributes(attributes)
         end
 
         # We keep a volatile copy of the raw refresh token for initial communication
