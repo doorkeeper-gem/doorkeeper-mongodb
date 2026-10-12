@@ -33,6 +33,16 @@ RSpec.configure do |config|
     end
   end
 
+  # Upstream StaleRecordsCleaner examples that stub `adapter_name` and expect
+  # the ActiveRecord-specific "expiration time math" warning. The Mongoid
+  # cleaner evaluates `created_at + expires_in` with `$expr`, so there is no
+  # unsupported-adapter path to warn about.
+  config.before do |example|
+    if example.full_description.include?("when the model uses an unsupported database adapter")
+      skip "ActiveRecord-only example (no database adapter fallback in the Mongoid cleaner)"
+    end
+  end
+
   config.before do
     Doorkeeper::Application.create_indexes
     Doorkeeper::AccessGrant.create_indexes
