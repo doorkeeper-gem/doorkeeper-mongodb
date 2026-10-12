@@ -2,8 +2,10 @@
 
 source "https://rubygems.org"
 
-# Uncomment to use local Doorkeeper gem
-# gem "doorkeeper", path: "./doorkeeper"
+# The test suite runs against the `doorkeeper` git submodule, not against the
+# installed doorkeeper gem: the Bundler path source behind `gemspec` also picks
+# up `doorkeeper/doorkeeper.gemspec` and puts `doorkeeper/lib` first on the load
+# path. Check out the Doorkeeper tag you want to test against in the submodule.
 
 gemspec
 

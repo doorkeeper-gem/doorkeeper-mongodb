@@ -5,6 +5,7 @@ User-visible changes worth mentioning.
 ## main
 
 - [#68] Fix: `as_json` returned `id` as a `BSON::ObjectId` (serialized as `{"$oid" => ...}` with bson 4.x) for application owners and access grants instead of a String.
+- [#104] Track Doorkeeper 5.9.9 in the `doorkeeper` submodule (the test suite runs against the submodule, not the installed gem). Align the `scopes.not_match_configured` message with Doorkeeper and drop the duplicated `activerecord` locale block. Doorkeeper 5.9.9's redirect URI hardening (script schemes are rejected) applies to Mongoid applications too, since the validator is shared.
 - Add your contribution here.
 - Modernize CI: test against Ruby 3.2–3.4, Rails 7.1–8.0, Mongoid 8–9 and MongoDB 7.0;
   skip upstream ActiveRecord-only examples when running the suite with Mongoid.
