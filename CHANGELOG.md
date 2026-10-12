@@ -4,6 +4,7 @@ User-visible changes worth mentioning.
 
 ## main
 
+- [#68] Fix: `as_json` returned `id` as a `BSON::ObjectId` (serialized as `{"$oid" => ...}` with bson 4.x) for application owners and access grants instead of a String.
 - Add your contribution here.
 
 ## 5.5.1

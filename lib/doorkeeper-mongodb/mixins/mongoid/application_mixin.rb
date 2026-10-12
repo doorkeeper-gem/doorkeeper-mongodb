@@ -79,7 +79,7 @@ module DoorkeeperMongodb
           def serializable_hash(options = nil)
             hash = super
             if hash.key?("_id")
-              hash["id"] = hash.delete("_id")
+              hash["id"] = hash.delete("_id").to_s
             elsif options && Array.wrap(options[:only].map(&:to_sym)).include?(:id)
               hash["id"] = id.to_s
             end
