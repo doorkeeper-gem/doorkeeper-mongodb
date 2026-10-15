@@ -8,7 +8,10 @@ module DoorkeeperMongodb
 
         def as_json(*args)
           json = super
-          json["id"] = json.delete("_id") if json.key?("_id")
+          if json.key?("_id")
+            json.delete("_id")
+            json["id"] = id.to_s
+          end
           json
         end
       end
