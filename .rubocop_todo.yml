@@ -43,12 +43,12 @@ Metrics/AbcSize:
 # Configuration parameters: CountComments, CountAsOne, ExcludedMethods, IgnoredMethods.
 # IgnoredMethods: refine
 Metrics/BlockLength:
-  Max: 64
+  Max: 66
 
 # Offense count: 2
 # Configuration parameters: CountComments, CountAsOne, ExcludedMethods, IgnoredMethods.
 Metrics/MethodLength:
-  Max: 29
+  Max: 31
 
 # Offense count: 2
 # Configuration parameters: CountComments, CountAsOne.
@@ -130,9 +130,3 @@ Style/StringLiterals:
   Exclude:
     - 'spec/dummy/config.ru'
 
-# Offense count: 1
-# This cop supports safe auto-correction (--auto-correct).
-# Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, AllowedPatterns, IgnoredPatterns.
-# URISchemes: http, https
-Layout/LineLength:
-  Max: 121

@@ -24,6 +24,15 @@ end
 RSpec.configure do |config|
   config.filter_run_excluding active_record: true
 
+  # Upstream examples that exercise ActiveRecord read/write database roles
+  # (`ActiveRecord::Base.connected_to`). They are not tagged `active_record: true`
+  # yet, so match them by description until upstream tags them.
+  config.before do |example|
+    if example.full_description.include?("with read replica support")
+      skip "ActiveRecord-only example (database roles are not a Mongoid concept)"
+    end
+  end
+
   config.before do
     Doorkeeper::Application.create_indexes
     Doorkeeper::AccessGrant.create_indexes

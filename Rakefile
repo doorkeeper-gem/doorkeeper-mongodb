@@ -27,6 +27,8 @@ task :load_doorkeeper do
     "",
   )
   `rm ./spec/models/doorkeeper/application_spec.rb`
+  # ActiveRecord read-replica concern, not applicable to Mongoid
+  `rm -f ./spec/lib/models/concerns/write_to_primary_spec.rb`
   `bundle exec rspec`
 end
 

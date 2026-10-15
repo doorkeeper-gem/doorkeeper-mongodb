@@ -1,6 +1,6 @@
 # Doorkeeper MongoDB extension
 [![Gem Version](https://badge.fury.io/rb/doorkeeper-mongodb.svg)](https://badge.fury.io/rb/doorkeeper-mongodb)
-[![Build Status](https://travis-ci.org/doorkeeper-gem/doorkeeper-mongodb.svg?branch=master)](https://travis-ci.org/doorkeeper-gem/doorkeeper-mongodb)
+[![CI](https://github.com/doorkeeper-gem/doorkeeper-mongodb/actions/workflows/test.yml/badge.svg)](https://github.com/doorkeeper-gem/doorkeeper-mongodb/actions/workflows/test.yml)
 
 ## Documentation
 
@@ -52,13 +52,17 @@ adding `autocreate_indexes: true` to your `config/mongoid.yml`
 
 To run tests, clone this repository and run `rake`. It will copy and run
 doorkeeper’s original test suite, after configuring the ORM according to the
-variables defined in `.travis.yml` file.
+variables defined in `.github/workflows/test.yml`. A MongoDB server listening
+on `localhost:27017` is required.
 
-To run locally, you need to choose a gemfile, with a command similar to:
+To run locally, you need to choose a Rails version and a gemfile, with a command
+similar to:
 
 ```bash
-$ export RAILS=6.0
-$ export BUNDLE_GEMFILE=$PWD/gemfiles/Gemfile.mongoid7.rb
+$ export RAILS=8.0
+$ export BUNDLE_GEMFILE=$PWD/gemfiles/Gemfile.mongoid9.rb
+$ bundle install
+$ bundle exec rake
 ```
 
 ---
