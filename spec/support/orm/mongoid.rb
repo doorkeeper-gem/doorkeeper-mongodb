@@ -33,6 +33,16 @@ RSpec.configure do |config|
     end
   end
 
+  # Upstream StaleRecordsCleaner examples that stub `adapter_name` and expect
+  # the ActiveRecord-specific "expiration time math" warning. The Mongoid
+  # cleaner evaluates `created_at + expires_in` with `$expr`, so there is no
+  # unsupported-adapter path to warn about.
+  config.before do |example|
+    if example.full_description.include?("when the model uses an unsupported database adapter")
+      skip "ActiveRecord-only example (no database adapter fallback in the Mongoid cleaner)"
+    end
+  end
+
   config.before do
     Doorkeeper::Application.create_indexes
     Doorkeeper::AccessGrant.create_indexes
@@ -41,5 +51,24 @@ RSpec.configure do |config|
     # To support custom attributes
     Doorkeeper::AccessToken.include WithCustomAttributes
     Doorkeeper::AccessGrant.include WithCustomAttributes
+  end
+
+  # Upstream examples whose expectations only hold for ActiveRecord. They are
+  # matched by description until they are tagged `active_record: true` upstream.
+  orm_specific_examples = {
+    # Compares the JSON `id` (a String) with `application.id` (a BSON::ObjectId).
+    "lists the applications authorized for that user" =>
+      "ActiveRecord-only expectation (JSON id is compared with a BSON::ObjectId)",
+    # `Class.new(Doorkeeper::Application)` is single-collection inheritance in
+    # Mongoid: queries through the subclass add a `_type` filter, so the record
+    # created through the base class is not found.
+    "when application_class is configured to a custom subclass" =>
+      "ActiveRecord-only setup (an anonymous subclass is single-collection inheritance in Mongoid)",
+  }
+
+  config.before do |example|
+    orm_specific_examples.each do |description, reason|
+      skip reason if example.full_description.include?(description)
+    end
   end
 end
