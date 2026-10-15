@@ -73,4 +73,4 @@ jobs:
 
       - name: Run tests
         timeout-minutes: 10
-        run: bundle exec rake spec || echo "Experimental build is done."
+        run: bundle exec rake spec
